@@ -1,0 +1,28 @@
+{
+  "id": "fujitsu-lifebook-ah544",
+    "brand": "Fujitsu",
+  "model": "Fujitsu Lifebook AH544",
+  "processor": "Intel Core i5-4210M",
+  "memory": {
+    "video": "NVIDIA GeForce GT 720M",
+    "ram": "4GB DDR3",
+    "hdd": "1TB HDD"
+  },
+  "images" : [ "img/fujitsu-lifebook-ah544/image1.jpg",
+	             "img/fujitsu-lifebook-ah544/image2.jpg",
+	             "img/fujitsu-lifebook-ah544/image3.jpg",
+	             "img/fujitsu-lifebook-ah544/image4.jpg"],
+	             "for": "Software engineers",
+	             "interfaces":["3x USB 3.0",
+	                           "2x USB 2.0",
+	                           "HDMI 1.4",
+	                          "Mini Display port",
+	                           "RJ-45",
+	                           "built-in microphone",
+	                           "built-in webcam"],
+	                           "opticalDevice":"DVD",
+	                           "weight":"1.95kg.",
+	                           "warranty":"3years",
+	                           "os":"Windows 10",
+  "price": 1145
+}

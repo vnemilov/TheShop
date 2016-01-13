@@ -1,0 +1,96 @@
+<div class="col-md-2">
+	<!-- Sidebar -->
+	<div class="col-md-12">
+		<section class="left"
+			style="border-right: 1px #23527c solid; width: auto">
+			<div class="filter">
+				Brand
+				<ul class="term-list">
+					<li class="term-item"
+						ng-repeat="brand in brandsGroup | orderBy:'toString()'"><label><input
+						type="checkbox" ng-model="useBrands[brand]" /><span>{{brand}}</span></label>
+						<span>({{ (filteredLaptops | filter:query |
+							filter:count('brand', brand)).length}})</span></li>
+				</ul>
+			</div>
+
+			<div class="filter">
+				RAM
+				<ul>
+					<li ng-repeat="ram in ramsGroup | orderBy:'toString()'"><label><input
+							type="checkbox" ng-model="useRams[ram]" />{{ram}}<span>({{
+							(filteredLaptops | filter:query | filter:count('ram',
+							ram)).length }})</span></label></li>
+				</ul>
+			</div>
+
+			<div class="filter">
+				HDD
+				<ul>
+					<li ng-repeat="hdd in hddsGroup | orderBy:'toString()'"><label><input
+							type="checkbox" ng-model="useHDDs[hdd]" />{{hdd}}<span>({{
+							(filteredLaptops | filter:query | filter:count('hdd',
+							hdd)).length }})</span></label></li>
+				</ul>
+			</div>
+			<div class="filter">
+				Video
+				<ul>
+					<li ng-repeat="video in videosGroup | orderBy:'toString()'"><label><input
+							type="checkbox" ng-model="useVideos[video]" />{{video}}<span>({{
+							(filteredLaptops | filter:query | filter:count('video',
+							video)).length }})</span></label></li>
+				</ul>
+			</div>
+			<div class="filter">
+				Processor
+				<ul>
+					<li ng-repeat="processor in processorsGroup | orderBy:'toString()'">
+						<label><input type="checkbox" ng-model="useProcessors[processor]" />{{processor}}
+						<span>({{ (filteredLaptops | filter:query |
+							filter:count('processor', processor)).length }})</span></label>
+					</li>
+				</ul>
+			</div>
+		</section>
+	</div>
+</div>
+<!-- /#sidebar-wrapper -->
+<div class="container-fluid col-md-10">
+	<div class="text-right total">
+		<a ui-sref="cart">
+			Total:
+		</a><span class="thePrice">${{total}}</span>
+		
+	</div>
+	<span>Sort by: </span><select ng-model="orderProp" ng-options="opt as opt.label for opt in orderOptions"></select>
+<!-- 	<input type="text" ng-model="price.price"> -->
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="col-md-4"
+				ng-repeat="laptop in filteredLaptops | orderBy:orderProp.value | filter:price">
+				<div class="itemBox">
+					<a ui-sref="laptop({name: '{{laptop.id}}'})" class="deviceName">{{laptop.model}}</a>
+					<a ui-sref="laptop({name: '{{laptop.id}}'})"><img
+						ng-src="{{laptop.images[0]}}" class="itemImage"></a>
+
+					<div>
+						<span>Processor:</span> {{laptop.processor}}
+					</div>
+					<div>
+						<span>HDD:</span> {{laptop.hdd}}
+					</div>
+					<div>
+						<span>RAM:</span> {{laptop.ram}}
+					</div>
+					<div>
+						<span>Video:</span> {{laptop.video}}
+					</div>
+					<button class="btn btn-success"
+						ng-click="this.disabled=true;buy(laptop)">Buy for
+						${{laptop.price}}</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

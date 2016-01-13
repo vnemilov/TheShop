@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- JS (load angular, ui-router, and our custom js file) -->
+
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
+<script src="bower_components/angular/angular.min.js"></script>
+
+<script
+	src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="bower_components/ngSweetAlert/SweetAlert.js"></script>
+<script src="bower_components/sweetalert/dist/sweetalert.min.js"></script>
+<link rel="stylesheet" href="bower_components/sweetalert/dist/sweetalert.css">
+<script src="app.js"></script>
+
+<!-- CSS (load bootstrap) -->
+<!-- include the core styles -->
+<!-- include a theme, can be included into the core instead of 2 separate files -->
+
+<link rel="stylesheet"
+	href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="resources/css/style.css">
+<!--     <link rel="stylesheet" href="resources/css/sismple-sidebar.css"> -->
+ 
+</head>
+
+<!-- apply our angular app to our site -->
+<body ng-app="routerApp">
+
+	<!-- NAVIGATION -->
+	<nav class="navbar-fixed-top navbar-inverse" role="navigation">
+		<ul class="nav navbar-nav leftNavMenu">
+			<li><a ui-sref="home">Home</a></li>
+			<li><a ui-sref="shop">Shop</a></li>
+			<li><a ui-sref="cart"><span
+					class="glyphicon glyphicon-shopping-cart"></span></a></li>
+		</ul>
+	</nav>
+	<div class="container-fluid">
+		<div ui-view></div>
+	</div>
+
+
+</body>
+</html>

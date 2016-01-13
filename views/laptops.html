@@ -1,0 +1,92 @@
+<div class="container oneLaptop">
+<div class="text-right total2">
+		<a ui-sref="cart">
+			<div>Total:</div>
+		</a><span class="thePrice">${{total}}</span>
+	</div>
+	<!-- <div ng-repeat="image in laptop.images"> -->
+	<!-- <img ng-src=laptops/{{image}} style="width:200px; height:150px;"></div> -->
+	<!-- <div> -->
+	<ul class="smallImages">
+		<li ng-repeat="image in laptop.images"><img
+			ng-src=laptops/{{image}} style="width: 100px; height: 75px;"
+			onclick="changeImage(this)"></li>
+	</ul>
+	<div>
+		<img id="mainImage" ng-src="laptops/{{laptop.images[0]}}"
+			style="width: 300px; height: 225px;">
+	</div>
+	<div>
+		<div>
+			<span>Model:</span> {{laptop.model}}
+		</div>
+		<div>
+			<span>Processor:</span> {{laptop.processor}}
+		</div>
+		<div>
+			<span>HDD:</span> {{laptop.hdd}}
+		</div>
+		<div>
+			<span>RAM:</span> {{laptop.ram}}
+		</div>
+		<div>
+			<span>Video:</span> {{laptop.video}}
+		</div>
+		<button class="btn btn-success"
+			ng-click="this.disabled=true;buyThis(laptop)">Buy for
+			${{laptop.price}}</button>
+	</div>
+	<div class="container">
+		<table class="table table-striped">
+			<tbody>
+				<tr>
+					<td>Brand: </td>
+					<td>{{laptop.brand}}</td>
+				</tr>
+				<tr>
+					<td>Good for: </td>
+					<td>{{laptop.for}}</td>
+				</tr>
+				<tr>
+					<td>Processor: </td>
+					<td>{{laptop.processor}}</td>
+				</tr>
+				<tr>
+					<td>Video: </td>
+					<td>{{laptop.video}}</td>
+				</tr>
+				<tr>
+					<td>RAM: </td>
+					<td>{{laptop.ram}}</td>
+				</tr>
+				<tr>
+					<td>HDD: </td>
+					<td>{{laptop.hdd}}</td>
+				</tr>
+				<tr>
+					<td>Model: </td>
+					<td>{{laptop.model}}</td>
+				</tr>
+				<tr>
+				<td>Interfaces: 
+				</td>
+					<td>
+						<ul>
+							<li ng-repeat="interface in laptop.interfaces">{{interface}}</li>
+						</ul>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+<script>
+	function changeImage(element) {
+		if (null != document.getElementById('selected')) {
+			var lastSelected = document.getElementById('selected');
+			lastSelected.id = "notSelected";
+		}
+		element.id = "selected";
+		document.getElementById('mainImage').src = element.src;
+	}
+</script>

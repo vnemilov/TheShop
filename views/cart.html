@@ -1,0 +1,42 @@
+<div ng-view="cart" class="cartView jumbotron">
+	<div ng-show="total>0">
+
+		<div>{{count.value}}</div>
+		<table class="table table-striped table-responsive">
+			<tbody>
+				<tr>
+					<th>Name</th>
+					<th>Quantity</th>
+					<th>Initial price</th>
+					<th>Total price</th>
+				</tr>
+				<tr ng-repeat="item in items">
+					<td><a ui-sref="laptop({name: '{{item.id}}'})">{{item.model}}</a></td>
+					<td><input type="number" class="quantity" id="{{item.id}}"
+						step="1" min="1" max="50" value="{{item.count}}" />
+						<button class="btn btn-success"
+							ng-click="this.disabled=true;buyMore(item)">Buy</button></td>
+					<td>${{item.price}}</td>
+					<td>
+						<p class="totalPriceForUnit">${{item.price*item.count}}</p><a
+						ng-click="removeItem(item.id)"><span
+							class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
+					</td>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td></td>
+					<td></td>
+					<td align="right">Total:</td>
+					<td ng-model="total">${{total}}</td>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+	<div ng-show="total==0" class="jumbotron text-center">
+		YOUR CART IS EMPTY <a ui-sref="shop" class="btn btn-danger shopButton"
+			role="button">Go back?</a>
+	</div>
+
+</div>
