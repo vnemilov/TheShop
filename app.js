@@ -86,10 +86,26 @@ routerApp.controller('AllLaptopsCtrl', function($scope, $http, CommonProp,
 	$scope.useVideos = {};
 	$scope.useProcessors = {};
 	$scope.total = CommonProp.getTotal();
-	$http.get('laptops/laptops.json').success(function(data) {
-		$scope.laptops = data;
-	});
-
+	
+	$scope.setLocale = function(newLocal) {
+		CommonProp.setLocale(newLocal);
+		document.getElementById('cartLink').click();
+		document.getElementById('shopLink').click();
+	};
+	
+	$scope.local = CommonProp.getLocale();
+	// TO DO: add laptopsBG
+	
+	if ($scope.local == 'en') {
+		$http.get('laptops/laptops-en_US.json').success(function(data) {
+			$scope.laptops = data;
+		});
+	}else{
+		$http.get('laptops/laptops-bg_BG.json').success(function(data) {
+			$scope.laptops = data;
+		});
+	};
+if($scope.local == 'en'){
 	$scope.orderOptions = [ {
 		label : 'Price (low to high)',
 		value : 'price'
@@ -103,6 +119,21 @@ routerApp.controller('AllLaptopsCtrl', function($scope, $http, CommonProp,
 		label : 'Brand (Z to A)',
 		value : '-model'
 	} ];
+}else{
+	$scope.orderOptions = [ {
+		label : 'Цена (ниска --> висока)',
+		value : 'price'
+	}, {
+		label : 'Цена (висока --> ниска)',
+		value : '-price'
+	}, {
+		label : 'Марка (A до Я)',
+		value : 'model'
+	}, {
+		label : 'Brand (Я до А)',
+		value : '-model'
+	} ];
+}
 	// Watch the laptops that are selected
 	$scope.$watch(function() {
 		return {
@@ -238,7 +269,6 @@ routerApp.controller('AllLaptopsCtrl', function($scope, $http, CommonProp,
 routerApp.controller('LaptopCtrl', function($scope, $stateParams, $http,
 		CommonProp) {
 	var name = $stateParams.name;
-
 	$scope.total = CommonProp.getTotal();
 	$http.get('laptops/' + name + '.json').success(function(data) {
 		$scope.laptop = data;
@@ -254,8 +284,15 @@ routerApp.service('CommonProp',
 		function() {
 			var Items = [];
 			var Total = 0;
+			var local = 'en';
 
 			return {
+				getLocale : function() {
+					return local;
+				},
+				setLocale : function(newLocal){
+					local = newLocal;
+				},
 				getItems : function() {
 					return Items;
 				},
