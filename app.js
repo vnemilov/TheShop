@@ -97,7 +97,7 @@ routerApp.controller('AllLaptopsCtrl', function($scope, $http, CommonProp,
 	// TO DO: add laptopsBG
 	
 	if ($scope.local == 'en') {
-		$http.get('laptops/laptops-en_US.json').success(function(data) {
+		$http.get('laptops/laptops.json').success(function(data) {
 			$scope.laptops = data;
 		});
 	}else{
