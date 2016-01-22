@@ -102,7 +102,7 @@ routerApp.controller('AllLaptopsCtrl', function($scope, $http, CommonProp,
 	$http.get('laptops/laptops.json').success(function(data) {
 		$scope.laptops = data;
 	});
-	$scope.orderOptions = [ {
+	 $scope.orderOptions = [ {
 		label : 'PRICE_LOW_TO_HIGH',
 		value : 'price'
 	}, {
