@@ -1,5 +1,5 @@
 var routerApp = angular.module('routerApp', [ 'ui.router',
-		'oitozero.ngSweetAlert' ]);
+		'pascalprecht.translate', 'oitozero.ngSweetAlert' ]);
 
 routerApp.config(function($stateProvider, $urlRouterProvider) {
 
@@ -33,6 +33,15 @@ routerApp.config(function($stateProvider, $urlRouterProvider) {
 	})
 });
 
+routerApp.config([ '$translateProvider', function($translateProvider) {
+	$translateProvider.preferredLanguage('enUS');
+
+	$translateProvider.useStaticFilesLoader({
+		prefix : '/languages/',
+		suffix : '.json'
+	});
+	$translateProvider.useSanitizeValueStrategy('escape');
+} ]);
 routerApp.controller('CartCtrl', function($scope, CommonProp) {
 	$scope.total = CommonProp.getTotal();
 	$scope.items = CommonProp.getItems();
@@ -76,9 +85,13 @@ routerApp.controller('CartCtrl', function($scope, CommonProp) {
 		$scope.total = CommonProp.getTotal();
 	};
 });
-
+routerApp.controller('navBar', function($scope, $translate) {
+	$scope.changeLanguage = function(langKey) {
+		$translate.use(langKey);
+	};
+});
 routerApp.controller('AllLaptopsCtrl', function($scope, $http, CommonProp,
-		$timeout) {
+		$translate, $timeout) {
 
 	$scope.useBrands = {};
 	$scope.useRams = {};
@@ -86,54 +99,23 @@ routerApp.controller('AllLaptopsCtrl', function($scope, $http, CommonProp,
 	$scope.useVideos = {};
 	$scope.useProcessors = {};
 	$scope.total = CommonProp.getTotal();
-	
-	$scope.setLocale = function(newLocal) {
-		CommonProp.setLocale(newLocal);
-		document.getElementById('cartLink').click();
-		document.getElementById('shopLink').click();
-	};
-	
-	$scope.local = CommonProp.getLocale();
-	// TO DO: add laptopsBG
-	
-	if ($scope.local == 'en') {
-		$http.get('laptops/laptops.json').success(function(data) {
-			$scope.laptops = data;
-		});
-	}else{
-		$http.get('laptops/laptops-bg_BG.json').success(function(data) {
-			$scope.laptops = data;
-		});
-	};
-if($scope.local == 'en'){
+	$http.get('laptops/laptops.json').success(function(data) {
+		$scope.laptops = data;
+	});
 	$scope.orderOptions = [ {
-		label : 'Price (low to high)',
+		label : 'PRICE_LOW_TO_HIGH',
 		value : 'price'
 	}, {
-		label : 'Price (high to low)',
+		label : 'PRICE_HIGH_TO_LOW',
 		value : '-price'
 	}, {
-		label : 'Brand (A to Z)',
+		label : 'BRAND_A_TO_Z',
 		value : 'model'
 	}, {
-		label : 'Brand (Z to A)',
+		label : 'BRAND_Z_TO_A',
 		value : '-model'
 	} ];
-}else{
-	$scope.orderOptions = [ {
-		label : 'Цена (ниска --> висока)',
-		value : 'price'
-	}, {
-		label : 'Цена (висока --> ниска)',
-		value : '-price'
-	}, {
-		label : 'Марка (A до Я)',
-		value : 'model'
-	}, {
-		label : 'Brand (Я до А)',
-		value : '-model'
-	} ];
-}
+
 	// Watch the laptops that are selected
 	$scope.$watch(function() {
 		return {
@@ -290,7 +272,7 @@ routerApp.service('CommonProp',
 				getLocale : function() {
 					return local;
 				},
-				setLocale : function(newLocal){
+				setLocale : function(newLocal) {
 					local = newLocal;
 				},
 				getItems : function() {

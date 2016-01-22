@@ -1,0 +1,23 @@
+{
+		"WELCOME" : "Добре дошли в магазина",
+		"INTRO_TEXT" : "Und sie untersützt mehrere Sprachen!",
+		"BUTTON_TEXT_EN" : "englisch",
+		"BUTTON_TEXT_DE" : "deutsch",
+		"HOME": "Начало",
+		"SHOP" : "Магазин",
+		"TOTAL": "Общо",
+		"SORT BY" : "Сортиране по",
+		"NOTHINGFOUND" : "няма намерени лаптопи",
+		"ONE FOUND" : "1 намерен лаптоп",
+		"LAPTOPSFOUND" : "намерени лаптопа",
+		"BRAND" : "Марка",
+		"PROCESSOR" : "Процесор",
+		"HDD" : "Хард диск",
+		"RAM" : "Рам памет",
+		"VIDEO" :"Графична карта",
+		"BUY_FOR" : "Купи за",
+		"PRICE_LOW_TO_HIGH" : "Най-ниска цена",
+		"PRICE_HIGH_TO_LOW" : "Най-висока цена",
+		"BRAND_A_TO_Z" : "Марка (A до Я)",
+		"BRAND_Z_TO_A" : "Brand (Я до А)"
+}

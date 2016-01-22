@@ -16,9 +16,9 @@
 						step="1" min="1" max="50" value="{{item.count}}" />
 						<button class="btn btn-success"
 							ng-click="this.disabled=true;buyMore(item)">Buy</button></td>
-					<td>${{item.price}}</td>
+					<td>{{item.price | currency:undefined:0}}</td>
 					<td>
-						<p class="totalPriceForUnit">${{item.price*item.count}}</p><a
+						<p class="totalPriceForUnit">{{item.price*item.count | currency:undefined:0}}</p><a
 						ng-click="removeItem(item.id)"><span
 							class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
 					</td>
@@ -29,7 +29,7 @@
 					<td></td>
 					<td></td>
 					<td align="right">Total:</td>
-					<td ng-model="total">${{total}}</td>
+					<td ng-model="total">{{total | currency:undefined:0}}</td>
 				</tr>
 			</tfoot>
 		</table>

@@ -4,7 +4,7 @@
 		<section class="left"
 			style="border-right: 1px #23527c solid; width: auto">
 			<div class="filter">
-				Brand
+				{{'BRAND' | translate}}
 				<ul class="term-list">
 					<li class="term-item"
 						ng-repeat="brand in brandsGroup | orderBy:'toString()'"><label><input
@@ -15,7 +15,7 @@
 			</div>
 
 			<div class="filter">
-				RAM
+				{{'RAM' | translate}}
 				<ul>
 					<li ng-repeat="ram in ramsGroup | orderBy:'toString()'"><label><input
 							type="checkbox" ng-model="useRams[ram]" />{{ram}}<span>({{
@@ -25,7 +25,7 @@
 			</div>
 
 			<div class="filter">
-				HDD
+				{{'HDD' | translate}}
 				<ul>
 					<li ng-repeat="hdd in hddsGroup | orderBy:'toString()'"><label><input
 							type="checkbox" ng-model="useHDDs[hdd]" />{{hdd}}<span>({{
@@ -34,7 +34,7 @@
 				</ul>
 			</div>
 			<div class="filter">
-				Video
+				{{'VIDEO' | translate}}
 				<ul>
 					<li ng-repeat="video in videosGroup | orderBy:'toString()'"><label><input
 							type="checkbox" ng-model="useVideos[video]" />{{video}}<span>({{
@@ -43,7 +43,7 @@
 				</ul>
 			</div>
 			<div class="filter">
-				Processor
+				{{'PROCESSOR' | translate}}
 				<ul>
 					<li ng-repeat="processor in processorsGroup | orderBy:'toString()'">
 						<label><input type="checkbox"
@@ -59,19 +59,16 @@
 <!-- /#sidebar-wrapper -->
 <div class="container-fluid col-md-10">
 	<div class="text-right total">
-	<button ng-click="setLocale('bg')">BG</button>
-	<button ng-click="setLocale('en')">EN</button>
-		<a ui-sref="cart"> Total: </a><span class="thePrice">${{total}}</span>
-		<input type="text" ng-model="laptopCount">
+		<a ui-sref="cart"> {{'TOTAL' | translate}}: </a><span class="thePrice">{{total | currency:undefined:0}}</span>
 	</div>
-	<span>Sort by: </span><select ng-model="orderProp"
-		ng-options="opt as opt.label for opt in orderOptions"></select>
+	<span>{{'SORT BY' | translate}}: </span><select ng-init="orderProp = orderOptions[2]" ng-model="orderProp" 
+		ng-options="opt as opt.label | translate for opt in orderOptions"></select>
 	<div>
 		<ng-pluralize count="filteredLaptops.length"
 			when="{
-	'0':'No laptops found',
-	'one':'1 laptop found',
-	'other':'{} laptops found'
+	'0':'{{&quot;NOTHINGFOUND&quot; | translate}}',
+	'one':'{{&quot;ONE FOUND&quot; | translate}}',
+	'other':'{} {{&quot;LAPTOPSFOUND&quot; | translate}}',
 	}">
 		</ng-pluralize>
 	</div>
@@ -86,20 +83,20 @@
 						ng-src="{{laptop.images[0]}}" class="itemImage"></a>
 
 					<div>
-						<span>Processor:</span> {{laptop.processor}}
+						<span>{{'PROCESSOR' | translate}}:</span> {{laptop.processor}}
 					</div>
 					<div>
-						<span>HDD:</span> {{laptop.hdd}}
+						<span>{{'HDD' | translate}}:</span> {{laptop.hdd}}
 					</div>
 					<div>
-						<span>RAM:</span> {{laptop.ram}}
+						<span>{{'RAM' | translate}}:</span> {{laptop.ram}}
 					</div>
 					<div>
-						<span>Video:</span> {{laptop.video}}
+						<span>{{'VIDEO' | translate}}:</span> {{laptop.video}}
 					</div>
 					<button class="btn btn-success"
-						ng-click="this.disabled=true;buy(laptop)">Buy for
-						${{laptop.price}}</button>
+						ng-click="this.disabled=true;buy(laptop)">{{'BUY_FOR' | translate}} 
+						{{laptop.price | currency:undefined:0}}</button>
 				</div>
 			</div>
 		</div>

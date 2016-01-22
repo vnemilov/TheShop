@@ -1,0 +1,23 @@
+{
+		"WELCOME" : "Welcome to the shop",
+		"INTRO_TEXT" : "And it has i18n support!",
+		"BUTTON_TEXT_EN" : "english",
+		"BUTTON_TEXT_DE" : "german",
+		"HOME": "Home",
+		"SHOP" : "Shop",
+		"TOTAL": "Total",
+		"SORT BY" : "Sort by",
+		"NOTHINGFOUND" : "no laptops were found",
+		"ONE FOUND" : "1 laptop found",
+		"LAPTOPSFOUND" : "laptops found",
+		"BRAND":"Brand",
+		"PROCESSOR": "Processor",
+		"HDD": "HDD",
+		"RAM": "RAM",
+		"VIDEO":"Graphic Card",
+		"BUY_FOR": "Buy for",
+		"PRICE_LOW_TO_HIGH": "Price (low to high)",
+		"PRICE_HIGH_TO_LOW": "Price (high to low)",
+		"BRAND_A_TO_Z": "Brand (A to Z)",
+		"BRAND_Z_TO_A": "Brand (Z to A)"
+}

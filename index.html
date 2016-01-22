@@ -7,6 +7,8 @@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 <script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
 <script src="bower_components/angular/angular.min.js"></script>
+<script src="bower_components/angular-translate/angular-translate.js"></script>
+<script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
 
 <script
 	src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
@@ -31,14 +33,19 @@
 <body ng-app="routerApp">
 
 	<!-- NAVIGATION -->
-	<nav class="navbar-fixed-top navbar-inverse" role="navigation">
+	<nav class="navbar-fixed-top navbar-inverse" role="navigation" ng-controller="navBar">
 		<ul class="nav navbar-nav leftNavMenu">
-			<li><a ui-sref="home">Home</a></li>
-			<li><a ui-sref="shop">Shop</a></li>
+			<li><a ui-sref="home">{{'HOME' | translate}}</a></li>
+			<li><a ui-sref="shop">{{'SHOP' | translate}}</a></li>
 			<li><a ui-sref="cart"><span
 					class="glyphicon glyphicon-shopping-cart"></span></a></li>
+				
+		<li class="languageLi"><a ng-click="changeLanguage('bgBG')" class="languageLink"><img src="resources/images/bgFlag.png"></a></li>
+		<li class="languageLi"><a ng-click="changeLanguage('enUS')" class="languageLink"><img src="resources/images/euFlag.gif"></a></li>
+
 		</ul>
 	</nav>
+
 	<div class="container-fluid">
 		<div ui-view></div>
 	</div>

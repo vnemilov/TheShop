@@ -247,3 +247,17 @@ html, body {
 .itemCount{
 	margin-right:10px;
 }
+a.languageLink{
+	cursor:pointer;
+	padding-top:0px !important;
+	padding-bottom:0px !important;
+	padding-right:0px !important;
+	padding-left:0px !important;
+	margin-bottom:7px;
+	margin-top:12px;
+	margin-left:15px;
+	margin-right:15px;
+}
+.languageLi{
+	height:55px;
+}
