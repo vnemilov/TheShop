@@ -60,7 +60,6 @@
 <div class="container-fluid col-md-10">
 
 	<div class="text-right total">
-	<p>{{'INTRO_TEXT' | translate}}</p>
 		<a ui-sref="cart"> {{'TOTAL' | translate}}: </a><span class="thePrice">{{total | currency:undefined:0}}</span>
 	</div>
 	<span>{{'SORT BY' | translate}}: </span><select ng-init="orderProp = orderOptions[2]" ng-model="orderProp" 

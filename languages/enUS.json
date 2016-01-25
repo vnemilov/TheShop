@@ -1,4 +1,11 @@
 {
+		"YES": "Yes!",
+		"NO": "No!",
+		"DELETED": "Deleted!",
+		"GOOD_BUY_MORE": "Good, keep buying more!",
+		"DELETE_THIS_ITEM": "Delete this item?",
+		"EMPTY_CART": "Your cart is empty!",
+		"GO_BACK": "Go back",
 		"WELCOME" : "Welcome to the shop",
 		"INTRO_TEXT" : "And it has i18n support!",
 		"BUTTON_TEXT_EN" : "english",
@@ -19,5 +26,6 @@
 		"PRICE_LOW_TO_HIGH": "Price (low to high)",
 		"PRICE_HIGH_TO_LOW": "Price (high to low)",
 		"BRAND_A_TO_Z": "Brand (A to Z)",
-		"BRAND_Z_TO_A": "Brand (Z to A)"
+		"BRAND_Z_TO_A": "Brand (Z to A)",
+		"REMOVE_THIS_ITEM" : "Remove this item?"
 }

@@ -42,25 +42,29 @@ routerApp.config([ '$translateProvider', function($translateProvider) {
 	});
 	$translateProvider.useSanitizeValueStrategy('escape');
 } ]);
-routerApp.controller('CartCtrl', function($scope, CommonProp) {
+routerApp.controller('CartCtrl', function($scope, CommonProp, $translate, $filter) {
 	$scope.total = CommonProp.getTotal();
 	$scope.items = CommonProp.getItems();
 
 	$scope.removeItem = function(laptop) {
-
+		var removeItemSwal = $filter('translate')('DELETE_THIS_ITEM');
+		var yesSwal = $filter('translate')('YES');
+		var noSwal = $filter('translate')('NO');
+		var deletedSwal = $filter('translate')("DELETED");
+		var goodBuyMoreSwal = $filter('translate')("GOOD_BUY_MORE");
 		swal({
-			title : "Remove this item?",
+			title : removeItemSwal,
 			showCancelButton : true,
 			confirmButtonColor : "#DD6B55",
-			confirmButtonText : "Yes!",
-			cancelButtonText : "No!",
+			confirmButtonText : yesSwal,
+			cancelButtonText : noSwal,
 			closeOnConfirm : false,
 			closeOnCancel : false
 		}, function(isConfirm) {
 			if (isConfirm) {
 				swal({
 					showConfirmButton : false,
-					title : "Deleted!",
+					title : deletedSwal,
 					text : " " + laptop + " ",
 					type : "success",
 					timer : 1500
@@ -70,7 +74,7 @@ routerApp.controller('CartCtrl', function($scope, CommonProp) {
 			} else {
 				swal({
 					showConfirmButton : false,
-					title : "Good, keep buying more!",
+					title : goodBuyMoreSwal,
 					text : " " + laptop + " ",
 					type : "success",
 					timer : 850
