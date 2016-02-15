@@ -15,7 +15,7 @@
 					<td><input type="number" class="quantity" id="{{item.id}}"
 						step="1" min="1" max="50" value="{{item.count}}" />
 						<button class="btn btn-success"
-							ng-click="this.disabled=true;buyMore(item)">Buy</button></td>
+							ng-click="buy(item)">Buy</button></td>
 					<td>{{item.price | currency:undefined:0}}</td>
 					<td>
 						<p class="totalPriceForUnit">{{item.price*item.count | currency:undefined:0}}</p><a

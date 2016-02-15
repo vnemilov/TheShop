@@ -27,5 +27,8 @@
 		"PRICE_HIGH_TO_LOW" : "Най-висока цена",
 		"BRAND_A_TO_Z" : "Марка (A до Я)",
 		"BRAND_Z_TO_A" : "Brand (Я до А)",
-		"REMOVE_THIS_ITEM" : "Премахнете този артикул?"
+		"REMOVE_THIS_ITEM" : "Премахнете този артикул?",
+		"PRICE": "15",
+		"LANGUAGE": "bg-price",
+		"LALA": "2"
 }

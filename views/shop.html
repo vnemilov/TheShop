@@ -60,11 +60,27 @@
 <div class="container-fluid col-md-10">
 
 	<div class="text-right total">
-		<a ui-sref="cart"> {{'TOTAL' | translate}}: </a><span class="thePrice">{{total | currency:undefined:0}}</span>
+		<div ng-if="language=='english'">
+			<a ui-sref="cart"> {{'TOTAL' | translate}}: </a><span
+				class="thePrice">€{{total * localCurrency | number:0}}</span>
+		</div>
+		<div ng-if="language=='bulgarian'">
+			<a ui-sref="cart"> {{'TOTAL' | translate}}: </a><span
+				class="thePrice">{{total * localCurrency | number:0}}лв.</span>
+		</div>
 	</div>
-	<span>{{'SORT BY' | translate}}: </span><select ng-init="orderProp = orderOptions[2]" ng-model="orderProp" 
+	<span>{{'SORT BY' | translate}}: </span><select
+		ng-init="orderProp = orderOptions[2]" ng-model="orderProp"
 		ng-options="opt as opt.label | translate for opt in orderOptions"></select>
 	<div>
+		<ul>
+			<li class="languageLi"><a id="bgbgbg"
+				ng-click="changeLanguage('bgBG')" class="languageLink"><img
+					src="resources/images/bgFlag.png"></a></li>
+			<li class="languageLi"><a ng-click="changeLanguage('enUS')"
+				class="languageLink"><img src="resources/images/euFlag.gif"></a></li>
+		</ul>
+		{{localCurrency}}
 		<ng-pluralize count="filteredLaptops.length"
 			when="{
 	'0':'{{&quot;NOTHINGFOUND&quot; | translate}}',
@@ -73,7 +89,6 @@
 	}">
 		</ng-pluralize>
 	</div>
-	<!-- 	<input type="text" ng-model="price.price"> -->
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="col-md-4"
@@ -95,9 +110,14 @@
 					<div>
 						<span>{{'VIDEO' | translate}}:</span> {{laptop.video}}
 					</div>
-					<button class="btn btn-success"
-						ng-click="this.disabled=true;buy(laptop)">{{'BUY_FOR' | translate}} 
-						{{laptop.price | currency:undefined:0}}</button>
+					<div ng-if="language=='english'">
+						<button class="btn btn-success" ng-click="buy(laptop)">{{"BUY_FOR"
+							| translate}} €{{(laptop.price * localCurrency).toFixed(0)}}</button>
+					</div>
+					<div ng-if="language=='bulgarian'">
+						<button class="btn btn-success" ng-click="buy(laptop)">{{"BUY_FOR"
+							| translate}} {{(laptop.price * localCurrency).toFixed(0)}}лв.</button>
+					</div>
 				</div>
 			</div>
 		</div>

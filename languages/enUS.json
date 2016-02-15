@@ -27,5 +27,8 @@
 		"PRICE_HIGH_TO_LOW": "Price (high to low)",
 		"BRAND_A_TO_Z": "Brand (A to Z)",
 		"BRAND_Z_TO_A": "Brand (Z to A)",
-		"REMOVE_THIS_ITEM" : "Remove this item?"
+		"REMOVE_THIS_ITEM" : "Remove this item?",
+		"PRICE": "1",
+		"LANGUAGE": "en-price",
+		"LALA": "1"
 }

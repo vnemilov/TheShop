@@ -1,8 +1,13 @@
 <div class="container oneLaptop">
-<div class="text-right total2">
-		<a ui-sref="cart">
-			<div>Total:</div>
-		</a><span class="thePrice">${{total}}</span>
+	<div class="text-right total">
+		<div ng-if="language=='english'">
+			<a ui-sref="cart"> {{'TOTAL' | translate}}: </a><span
+				class="thePrice">€{{total * localCurrency | number:0}}</span>
+		</div>
+		<div ng-if="language=='bulgarian'">
+			<a ui-sref="cart"> {{'TOTAL' | translate}}: </a><span
+				class="thePrice">{{total * localCurrency | number:0}}лв.</span>
+		</div>
 	</div>
 	<!-- <div ng-repeat="image in laptop.images"> -->
 	<!-- <img ng-src=laptops/{{image}} style="width:200px; height:150px;"></div> -->
@@ -32,44 +37,52 @@
 		<div>
 			<span>Video:</span> {{laptop.video}}
 		</div>
-		<button class="btn btn-success"
+		<!-- <button class="btn btn-success"
 			ng-click="this.disabled=true;buyThis(laptop)">Buy for
-			${{laptop.price}}</button>
+			${{laptop.price}}</button> -->
+		<div ng-if="language=='english'">
+			<button class="btn btn-success" ng-click="buy(laptop)">{{"BUY_FOR"
+				| translate}} €{{(laptop.price * localCurrency).toFixed(0)}}</button>
+		</div>
+		<div ng-if="language=='bulgarian'">
+			<button class="btn btn-success" ng-click="buy(laptop)">{{"BUY_FOR"
+				| translate}} {{(laptop.price * localCurrency).toFixed(0)}}лв..</button>
+		</div>
+
 	</div>
 	<div class="container">
 		<table class="table table-striped">
 			<tbody>
 				<tr>
-					<td>Brand: </td>
+					<td>Brand:</td>
 					<td>{{laptop.brand}}</td>
 				</tr>
 				<tr>
-					<td>Good for: </td>
+					<td>Good for:</td>
 					<td>{{laptop.for}}</td>
 				</tr>
 				<tr>
-					<td>Processor: </td>
+					<td>Processor:</td>
 					<td>{{laptop.processor}}</td>
 				</tr>
 				<tr>
-					<td>Video: </td>
+					<td>Video:</td>
 					<td>{{laptop.video}}</td>
 				</tr>
 				<tr>
-					<td>RAM: </td>
+					<td>RAM:</td>
 					<td>{{laptop.ram}}</td>
 				</tr>
 				<tr>
-					<td>HDD: </td>
+					<td>HDD:</td>
 					<td>{{laptop.hdd}}</td>
 				</tr>
 				<tr>
-					<td>Model: </td>
+					<td>Model:</td>
 					<td>{{laptop.model}}</td>
 				</tr>
 				<tr>
-				<td>Interfaces: 
-				</td>
+					<td>Interfaces:</td>
 					<td>
 						<ul>
 							<li ng-repeat="interface in laptop.interfaces">{{interface}}</li>
