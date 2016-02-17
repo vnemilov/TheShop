@@ -89,6 +89,26 @@
 	}">
 		</ng-pluralize>
 	</div>
+	<script>
+	site = 'https://www.ecb.europa.eu/rss/fxref-bgn.html';
+	var yql = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent('select * from xml where url="' + site + '"') + '&format=xml&callback=?';
+	$(document).ready(function(){
+	    $("#getJSONData").click(function(){
+	        $.getJSON(yql, function(result){
+			var xml = result.results[0];
+	 xmlDoc = $.parseXML( xml ),
+	  $xml = $( xmlDoc ),
+	  $title = $xml.find( "value" );
+	                $("#hoho").append($title);
+					return;
+	        });
+	    });
+	});
+</script>
+<button id="getJSONData">Get JSON data</button>
+
+<div id="hoho" hidden></div>
+<button onclick="alert($( 'value' ).first().text())">ALERT</button>
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="col-md-4"

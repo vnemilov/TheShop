@@ -1,52 +1,52 @@
-<div class="container oneLaptop">
+<div class="container oneLaptop" ng-controller="LaptopCtrl as lctrl">
 	<div class="text-right total">
-		<div ng-if="language=='english'">
+		<div ng-if="lctrl.language=='english'">
 			<a ui-sref="cart"> {{'TOTAL' | translate}}: </a><span
-				class="thePrice">€{{total * localCurrency | number:0}}</span>
+				class="thePrice">€{{lctrl.total * lctrl.localCurrency | number:0}}</span>
 		</div>
-		<div ng-if="language=='bulgarian'">
+		<div ng-if="lctrl.language=='bulgarian'">
 			<a ui-sref="cart"> {{'TOTAL' | translate}}: </a><span
-				class="thePrice">{{total * localCurrency | number:0}}лв.</span>
+				class="thePrice">{{lctrl.total * lctrl.localCurrency | number:0}}лв.</span>
 		</div>
 	</div>
 	<!-- <div ng-repeat="image in laptop.images"> -->
 	<!-- <img ng-src=laptops/{{image}} style="width:200px; height:150px;"></div> -->
 	<!-- <div> -->
 	<ul class="smallImages">
-		<li ng-repeat="image in laptop.images"><img
+		<li ng-repeat="image in lctrl.laptop.images"><img
 			ng-src=laptops/{{image}} style="width: 100px; height: 75px;"
 			onclick="changeImage(this)"></li>
 	</ul>
 	<div>
-		<img id="mainImage" ng-src="laptops/{{laptop.images[0]}}"
+		<img id="mainImage" ng-src="laptops/{{lctrl.laptop.images[0]}}"
 			style="width: 300px; height: 225px;">
 	</div>
 	<div>
 		<div>
-			<span>Model:</span> {{laptop.model}}
+			<span>Model:</span> {{lctrl.laptop.model}}
 		</div>
 		<div>
-			<span>Processor:</span> {{laptop.processor}}
+			<span>Processor:</span> {{lctrl.laptop.processor}}
 		</div>
 		<div>
-			<span>HDD:</span> {{laptop.hdd}}
+			<span>HDD:</span> {{lctrl.laptop.hdd}}
 		</div>
 		<div>
-			<span>RAM:</span> {{laptop.ram}}
+			<span>RAM:</span> {{lctrl.laptop.ram}}
 		</div>
 		<div>
-			<span>Video:</span> {{laptop.video}}
+			<span>Video:</span> {{lctrl.laptop.video}}
 		</div>
 		<!-- <button class="btn btn-success"
 			ng-click="this.disabled=true;buyThis(laptop)">Buy for
 			${{laptop.price}}</button> -->
-		<div ng-if="language=='english'">
-			<button class="btn btn-success" ng-click="buy(laptop)">{{"BUY_FOR"
-				| translate}} €{{(laptop.price * localCurrency).toFixed(0)}}</button>
+		<div ng-if="lctrl.language=='english'">
+			<button class="btn btn-success" ng-click="lctrl.buy(lctrl.laptop)">{{"BUY_FOR"
+				| translate}} €{{(lctrl.laptop.price * lctrl.localCurrency).toFixed(0)}}</button>
 		</div>
-		<div ng-if="language=='bulgarian'">
-			<button class="btn btn-success" ng-click="buy(laptop)">{{"BUY_FOR"
-				| translate}} {{(laptop.price * localCurrency).toFixed(0)}}лв..</button>
+		<div ng-if="lctrl.language=='bulgarian'">
+			<button class="btn btn-success" ng-click="lctrl.buy(lctrl.laptop)">{{"BUY_FOR"
+				| translate}} {{(lctrl.laptop.price * lctrl.localCurrency).toFixed(0)}}лв..</button>
 		</div>
 
 	</div>
@@ -55,37 +55,37 @@
 			<tbody>
 				<tr>
 					<td>Brand:</td>
-					<td>{{laptop.brand}}</td>
+					<td>{{lctrl.laptop.brand}}</td>
 				</tr>
 				<tr>
 					<td>Good for:</td>
-					<td>{{laptop.for}}</td>
+					<td>{{lctrl.laptop.for}}</td>
 				</tr>
 				<tr>
 					<td>Processor:</td>
-					<td>{{laptop.processor}}</td>
+					<td>{{lctrl.laptop.processor}}</td>
 				</tr>
 				<tr>
 					<td>Video:</td>
-					<td>{{laptop.video}}</td>
+					<td>{{lctrl.laptop.video}}</td>
 				</tr>
 				<tr>
 					<td>RAM:</td>
-					<td>{{laptop.ram}}</td>
+					<td>{{lctrl.laptop.ram}}</td>
 				</tr>
 				<tr>
 					<td>HDD:</td>
-					<td>{{laptop.hdd}}</td>
+					<td>{{lctrl.laptop.hdd}}</td>
 				</tr>
 				<tr>
 					<td>Model:</td>
-					<td>{{laptop.model}}</td>
+					<td>{{lctrl.laptop.model}}</td>
 				</tr>
 				<tr>
 					<td>Interfaces:</td>
 					<td>
 						<ul>
-							<li ng-repeat="interface in laptop.interfaces">{{interface}}</li>
+							<li ng-repeat="interface in lctrl.laptop.interfaces">{{interface}}</li>
 						</ul>
 					</td>
 				</tr>

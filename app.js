@@ -280,25 +280,28 @@ routerApp.controller('ShopCtrl', function($scope, $http, CommonProp,
 });
 
 //LAPTOP CONTROLLER
-routerApp.controller('LaptopCtrl', function($scope, $stateParams, $http,
+routerApp.controller('LaptopCtrl', function($stateParams, $http,
 		CommonProp) {
-	$scope.total = CommonProp.getTotal();
+	var vm = this;
+	vm.laptop = {};
+	vm.total = CommonProp.getTotal();
+	vm.justMessage = 'heheheheh';
 	
 	//Load the json file for the laptop
-	var name = $stateParams.name;
-	$http.get('laptops/' + name + '.json').success(function(data) {
-		$scope.laptop = data;
+	vm.name = $stateParams.name;
+	$http.get('laptops/' + vm.name + '.json').success(function(data) {
+		vm.laptop = data;
 	});
-	$scope.language = CommonProp.getLocale();
-	if ($scope.language == 'bulgarian') {
-		$scope.localCurrency = 1.95;
+	vm.language = CommonProp.getLocale();
+	if (vm.language == 'bulgarian') {
+		vm.localCurrency = 1.95;
 	} else {
-		$scope.localCurrency = 1;
+		vm.localCurrency = 1;
 	}
-	$scope.buy = function(laptop) {
+	vm.buy = function(laptop) {
 		CommonProp.addItem(laptop);
 		CommonProp.setTotal(laptop);
-		$scope.total = CommonProp.getTotal();
+		vm.total = CommonProp.getTotal();
 	}
 });
 
