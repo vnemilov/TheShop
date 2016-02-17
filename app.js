@@ -82,6 +82,7 @@ routerApp.controller('CartCtrl', function($scope, CommonProp, $translate,
 					timer : 850
 				});
 			}
+			
 		});
 	};
 	$scope.buy = function(laptop) {
