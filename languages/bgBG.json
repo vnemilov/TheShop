@@ -30,5 +30,9 @@
 		"REMOVE_THIS_ITEM" : "Премахнете този артикул?",
 		"PRICE": "15",
 		"LANGUAGE": "bg-price",
-		"LALA": "2"
+		"LALA": "2",
+		"NAME": "Име",
+		"QUANTITY": "Брой",
+		"INITIAL_PRICE": "Единична цена",
+		"TOTAL_PRICE": "Обща цена"
 }

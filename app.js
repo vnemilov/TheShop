@@ -44,11 +44,13 @@ routerApp.config([ '$translateProvider', function($translateProvider) {
 //CART CONTROLLER
 routerApp.controller('CartCtrl', function($scope, CommonProp, $translate,
 		$filter) {
-	$scope.total = CommonProp.getTotal();
-	$scope.items = CommonProp.getItems();
-
+	var vm = this;
+	vm.total = CommonProp.getTotal();
+	vm.items = CommonProp.getItems();
+	vm.language = CommonProp.getLocale();
+	vm.localCurrency = CommonProp.getLocalCurrency();
 	//Sweet alert used to create a modal window for deletion
-	$scope.removeItem = function(laptop) {
+	vm.removeItem = function(laptop) {
 		var removeItemSwal = $filter('translate')('DELETE_THIS_ITEM');
 		var yesSwal = $filter('translate')('YES');
 		var noSwal = $filter('translate')('NO');
@@ -71,7 +73,7 @@ routerApp.controller('CartCtrl', function($scope, CommonProp, $translate,
 					type : "success",
 					timer : 1500
 				}), CommonProp.removeItem(laptop);
-				$scope.total = CommonProp.getTotal();
+				vm.total = CommonProp.getTotal();
 				$scope.$digest();
 			} else {
 				swal({
@@ -85,28 +87,30 @@ routerApp.controller('CartCtrl', function($scope, CommonProp, $translate,
 			
 		});
 	};
-	$scope.buy = function(laptop) {
+	vm.buy = function(laptop) {
 		CommonProp.addMore(laptop);
 		CommonProp.setTotal(laptop);
-		$scope.total = CommonProp.getTotal();
+		vm.total = CommonProp.getTotal();
 	};
 });
 
 // SHOP CONTROLLER
 routerApp.controller('ShopCtrl', function($scope, $http, CommonProp,
 		$translate, $timeout, $filter) {
-	$scope.language = CommonProp.getLocale();
-	$scope.useBrands = {};
-	$scope.useRams = {};
-	$scope.useHDDs = {};
-	$scope.useVideos = {};
-	$scope.useProcessors = {};
-	$scope.total = CommonProp.getTotal();
+	var vm = this;
+	vm.language = CommonProp.getLocale();
+	vm.useBrands = [];
+	vm.useRams = [];
+	vm.useHDDs =[];
+	vm.useVideos = [];
+	vm.laptops = [];
+	vm.useProcessors = [];
+	vm.total = CommonProp.getTotal();
 	$http.get('laptops/laptops.json').success(function(data) {
-		$scope.laptops = data;
+		vm.laptops = data;
 	});
 	//Filter to order items
-	$scope.orderOptions = [ {
+	vm.orderOptions = [ {
 		label : 'PRICE_LOW_TO_HIGH',
 		value : 'price'
 	}, {
@@ -126,31 +130,31 @@ routerApp.controller('ShopCtrl', function($scope, $http, CommonProp,
 	
 	
 	// Watch the laptops that are selected
-	$scope.$watch(function() {
+	$scope.$watch(angular.bind(this, function() {
 		return {
-			language : $scope.language,
-			laptops : $scope.laptops,
-			useBrands : $scope.useBrands,
-			useRams : $scope.useRams,
-			useHDDs : $scope.useHDDs,
-			useVideos : $scope.useVideos,
-			useProcessors : $scope.useProcessors
+			language : vm.language,
+			laptops : vm.laptops,
+			useBrands : vm.useBrands,
+			useRams : vm.useRams,
+			useHDDs : vm.useHDDs,
+			useVideos : vm.useVideos,
+			useProcessors : vm.useProcessors
 		}
-	}, function(value) {
+	}), function(value) {
 		var selected;
 
-		$scope.count = function(prop, value) {
+		vm.count = function(prop, value) {
 			return function(el) {
 				return el[prop] == value;
 			};
 		};
-		$scope.brandsGroup = uniqueItems($scope.laptops, 'brand');
+		vm.brandsGroup = uniqueItems(vm.laptops, 'brand');
 		var filterAfterBrands = [];
 		selected = false;
-		for ( var j in $scope.laptops) {
-			var p = $scope.laptops[j];
-			for ( var i in $scope.useBrands) {
-				if ($scope.useBrands[i]) {
+		for ( var j in vm.laptops) {
+			var p = vm.laptops[j];
+			for ( var i in vm.useBrands) {
+				if (vm.useBrands[i]) {
 					selected = true;
 					if (i == p.brand) {
 						filterAfterBrands.push(p);
@@ -160,15 +164,15 @@ routerApp.controller('ShopCtrl', function($scope, $http, CommonProp,
 			}
 		}
 		if (!selected) {
-			filterAfterBrands = $scope.laptops;
+			filterAfterBrands = vm.laptops;
 		}
-		$scope.ramsGroup = uniqueItems($scope.laptops, 'ram');
+		vm.ramsGroup = uniqueItems(vm.laptops, 'ram');
 		var filterAfterRams = [];
 		selected = false;
 		for ( var j in filterAfterBrands) {
 			var p = filterAfterBrands[j];
-			for ( var i in $scope.useRams) {
-				if ($scope.useRams[i]) {
+			for ( var i in vm.useRams) {
+				if (vm.useRams[i]) {
 					selected = true;
 					if (i == p.ram) {
 						filterAfterRams.push(p);
@@ -180,13 +184,13 @@ routerApp.controller('ShopCtrl', function($scope, $http, CommonProp,
 		if (!selected) {
 			filterAfterRams = filterAfterBrands;
 		}
-		$scope.hddsGroup = uniqueItems($scope.laptops, 'hdd');
+		vm.hddsGroup = uniqueItems(vm.laptops, 'hdd');
 		var filterAfterHDDs = [];
 		selected = false;
 		for ( var j in filterAfterRams) {
 			var p = filterAfterRams[j];
-			for ( var i in $scope.useHDDs) {
-				if ($scope.useHDDs[i]) {
+			for ( var i in vm.useHDDs) {
+				if (vm.useHDDs[i]) {
 					selected = true;
 					if (i == p.hdd) {
 						filterAfterHDDs.push(p);
@@ -199,13 +203,13 @@ routerApp.controller('ShopCtrl', function($scope, $http, CommonProp,
 			filterAfterHDDs = filterAfterRams;
 		}
 
-		$scope.videosGroup = uniqueItems($scope.laptops, 'video');
+		vm.videosGroup = uniqueItems(vm.laptops, 'video');
 		var filterAfterVideos = [];
 		selected = false;
 		for ( var j in filterAfterHDDs) {
 			var p = filterAfterHDDs[j];
-			for ( var i in $scope.useVideos) {
-				if ($scope.useVideos[i]) {
+			for ( var i in vm.useVideos) {
+				if (vm.useVideos[i]) {
 					selected = true;
 					if (i == p.video) {
 						filterAfterVideos.push(p);
@@ -217,13 +221,13 @@ routerApp.controller('ShopCtrl', function($scope, $http, CommonProp,
 		if (!selected) {
 			filterAfterVideos = filterAfterHDDs;
 		}
-		$scope.processorsGroup = uniqueItems($scope.laptops, 'processor');
+		vm.processorsGroup = uniqueItems(vm.laptops, 'processor');
 		var filterAfterProcessors = [];
 		selected = false;
 		for ( var j in filterAfterVideos) {
 			var p = filterAfterVideos[j];
-			for ( var i in $scope.useProcessors) {
-				if ($scope.useProcessors[i]) {
+			for ( var i in vm.useProcessors) {
+				if (vm.useProcessors[i]) {
 					selected = true;
 					if (i == p.processor) {
 						filterAfterProcessors.push(p);
@@ -236,7 +240,7 @@ routerApp.controller('ShopCtrl', function($scope, $http, CommonProp,
 			filterAfterProcessors = filterAfterVideos;
 		}
 		var delay = function() {
-			$scope.filteredLaptops = filterAfterProcessors;
+			vm.filteredLaptops = filterAfterProcessors;
 		}
 
 		$timeout(delay, 200);
@@ -248,28 +252,28 @@ routerApp.controller('ShopCtrl', function($scope, $http, CommonProp,
 //		}
 //	}, true);
 
-	$scope.buy = function(laptop) {
+	vm.buy = function(laptop) {
 		CommonProp.addItem(laptop);
 		CommonProp.setTotal(laptop);
-		$scope.total = CommonProp.getTotal();
+		vm.total = CommonProp.getTotal();
 	};
-	$scope.language = CommonProp.getLocale();
-	$scope.localCurrency = CommonProp.getLocalCurrency();
+	vm.language = CommonProp.getLocale();
+	vm.localCurrency = CommonProp.getLocalCurrency();
 
 	//Changing the language for the app
-	$scope.changeLanguage = function(langKey) {
+	vm.changeLanguage = function(langKey) {
 		if (langKey == "bgBG") {
 			CommonProp.setLocale('bulgarian');
 			CommonProp.setLocalCurrency(1.95);
-			$scope.language = 'bulgarian';
+			vm.language = 'bulgarian';
 			$translate.use(langKey);
-			$scope.localCurrency = CommonProp.getLocalCurrency();
+			vm.localCurrency = CommonProp.getLocalCurrency();
 		} else {
 			CommonProp.setLocale('english');
 			CommonProp.setLocalCurrency(1);
-			$scope.language = 'english';
+			vm.language = 'english';
 			$translate.use(langKey);
-			$scope.localCurrency = CommonProp.getLocalCurrency();
+			vm.localCurrency = CommonProp.getLocalCurrency();
 
 		}
 	};

@@ -1,43 +1,52 @@
-<div ng-view="cart" class="cartView jumbotron">
-	<div ng-show="total>0">
+<div ng-view="cart" class="cartView jumbotron"
+	ng-controller="CartCtrl as cctrl">
+	<div ng-show="cctrl.total>0">
 
-		<div>{{count.value}}</div>
+		<div>{{cctrl.count.value}}</div>
 		<table class="table table-striped table-responsive">
 			<tbody>
 				<tr>
-					<th>Name</th> 
-					<th>Quantity</th>
-					<th>Initial price</th>
-					<th>Total price</th>
+					<th>{{'NAME' | translate}}</th>
+					<th>{{'QUANTITY' | translate}}</th>
+					<th>{{'INITIAL_PRICE' | translate}}</th>
+					<th>{{'TOTAL_PRICE' | translate}}</th>
 				</tr>
-				<tr ng-repeat="item in items">
+				<tr ng-repeat="item in cctrl.items">
 					<td><a ui-sref="laptop({name: '{{item.id}}'})">{{item.model}}</a></td>
 					<td><input type="number" class="quantity" id="{{item.id}}"
 						step="1" min="1" max="50" value="{{item.count}}" />
-						<button class="btn btn-success"
-							ng-click="buy(item)">Buy</button></td>
-					<td>{{item.price | currency:undefined:0}}</td>
+							<button ng-if="cctrl.language=='english'" class="btn btn-success" ng-click="cctrl.buy(item)">Buy</button>
+						<button ng-if="cctrl.language=='bulgarian'"  class="btn btn-success" ng-click="cctrl.buy(item)">Купи</button>
+					</td>
+					<td><div ng-if="cctrl.language=='english'">
+					€{{item.price * cctrl.localCurrency | number:0}}
+<!-- 					{{item.price | currency:undefined:0}} -->
+					</div>
+					<div ng-if="cctrl.language=='bulgarian'">
+					{{item.price * cctrl.localCurrency | number:0}}лв.
+					</div></td>
 					<td>
-						<p class="totalPriceForUnit">{{item.price*item.count | currency:undefined:0}}</p><a
-						ng-click="removeItem(item.id)"><span
+						<p ng-if="cctrl.language=='english'" class="totalPriceForUnit">€{{item.price*item.count | number:0}}</p>
+						<p ng-if="cctrl.language=='bulgarian'" class="totalPriceForUnit">{{item.price*item.count | number:0}}лв.</p> <a ng-click="cctrl.removeItem(item.id)"><span
 							class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
 					</td>
-					
+
 				</tr>
 			</tbody>
 			<tfoot>
 				<tr>
 					<td></td>
 					<td></td>
-					<td align="right">Total:</td>
-					<td ng-model="total">{{total | currency:undefined:0}}</td>
+					<td align="right">{{'TOTAL' | translate}}:</td>
+					<td ng-model="total">{{cctrl.total | currency:undefined:0}}</td>
 				</tr>
 			</tfoot>
 		</table>
 	</div>
-	<div ng-show="total==0" class="jumbotron text-center">
-		{{'EMPTY_CART' | translate}} <a ui-sref="shop" class="btn btn-danger shopButton"
-			role="button">{{'GO_BACK' | translate}}</a>
+	<div ng-show="cctrl.total==0" class="jumbotron text-center">
+		{{'EMPTY_CART' | translate}} <a ui-sref="shop"
+			class="btn btn-danger shopButton" role="button">{{'GO_BACK' |
+			translate}}</a>
 	</div>
 
 </div>
