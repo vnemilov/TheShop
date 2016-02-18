@@ -26,8 +26,8 @@
 					{{item.price * cctrl.localCurrency | number:0}}лв.
 					</div></td>
 					<td>
-						<p ng-if="cctrl.language=='english'" class="totalPriceForUnit">€{{item.price*item.count | number:0}}</p>
-						<p ng-if="cctrl.language=='bulgarian'" class="totalPriceForUnit">{{item.price*item.count | number:0}}лв.</p> <a ng-click="cctrl.removeItem(item.id)"><span
+						<p ng-if="cctrl.language=='english'" class="totalPriceForUnit">€{{(item.price*cctrl.localCurrency)*item.count | number:0}}</p>
+						<p ng-if="cctrl.language=='bulgarian'" class="totalPriceForUnit">{{(item.price*cctrl.localCurrency)*item.count | number:0}}лв.</p> <a ng-click="cctrl.removeItem(item.id)"><span
 							class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
 					</td>
 
@@ -38,7 +38,8 @@
 					<td></td>
 					<td></td>
 					<td align="right">{{'TOTAL' | translate}}:</td>
-					<td ng-model="total">{{cctrl.total | currency:undefined:0}}</td>
+					<td ng-model="total" ng-if="cctrl.language=='english'">€{{cctrl.total | number:0}}</td>
+					<td ng-model="total" ng-if="cctrl.language=='bulgarian'">{{cctrl.total | number:0}}лв.</td>
 				</tr>
 			</tfoot>
 		</table>

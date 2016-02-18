@@ -132,7 +132,6 @@ routerApp.controller('ShopCtrl', function($scope, $http, CommonProp,
 	// Watch the laptops that are selected
 	$scope.$watch(angular.bind(this, function() {
 		return {
-			language : vm.language,
 			laptops : vm.laptops,
 			useBrands : vm.useBrands,
 			useRams : vm.useRams,
