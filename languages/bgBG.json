@@ -7,9 +7,6 @@
 		"EMPTY_CART": "Количката е празна!",
 		"GO_BACK": "Върни се назад",
 		"WELCOME" : "Добре дошли в магазина",
-		"INTRO_TEXT" : "Und sie untersützt mehrere Sprachen!",
-		"BUTTON_TEXT_EN" : "englisch",
-		"BUTTON_TEXT_DE" : "deutsch",
 		"HOME": "Начало",
 		"SHOP" : "Магазин",
 		"TOTAL": "Общо",
@@ -34,5 +31,5 @@
 		"NAME": "Име",
 		"QUANTITY": "Брой",
 		"INITIAL_PRICE": "Единична цена",
-		"TOTAL_PRICE": "Обща цена"
+		"TOTAL_PRICE": "Обща сума"
 }
