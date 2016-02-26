@@ -83,7 +83,7 @@
 		<div class="text-right total">
 			<div ng-if="shctrl.language=='english'">
 				<a ui-sref="cart"> {{'TOTAL' | translate}}: </a><span
-					class="thePrice">€{{shctrl.total * shctrl.localCurrency |
+					class="thePrice">€{{total * shctrl.localCurrency |
 					number:0}}</span>
 			</div>
 			<div ng-if="shctrl.language=='bulgarian'">

@@ -44,7 +44,7 @@ routerApp.config([ '$translateProvider', function($translateProvider) {
 //MAIN CONTROLLER
 routerApp.controller('MainCtrl', function($scope, CommonProp, $translate, $filter){
 	var vm = this;
-	vm.total = CommonProp.getTotal();
+	$scope.total = CommonProp.getTotal();
 	vm.items = CommonProp.getItems();
 	vm.language = CommonProp.getLocale();
 	
@@ -72,7 +72,7 @@ routerApp.controller('MainCtrl', function($scope, CommonProp, $translate, $filte
 			var orders = $scope.db.getCollection('orders');
 			CommonProp.setItems(orders.data[0].items);
 			CommonProp.setTotal(orders.data[0].total);
-			vm.total = CommonProp.getTotal();
+			$scope.total = CommonProp.getTotal();
 			$scope.db.saveDatabase();
 		}
 		var users2 = $scope.db.getCollection('orders');
@@ -160,6 +160,7 @@ routerApp.controller('ShopCtrl', function($scope, $http, CommonProp,
 		$translate, $timeout, $filter) {
 
 	var vm = this;
+	
 //	vm.cart = 'cart';
 //	var db = new loki(vm.cart, {
 //		autoload : false,
@@ -198,7 +199,7 @@ routerApp.controller('ShopCtrl', function($scope, $http, CommonProp,
 	vm.useVideos = [];
 	vm.laptops = [];
 	vm.useProcessors = [];
-	vm.total = CommonProp.getTotal();
+//	vm.total = CommonProp.getTotal();
 	$http.get('laptops/laptops.json').success(function(data) {
 		vm.laptops = data;
 	});
@@ -347,12 +348,13 @@ routerApp.controller('ShopCtrl', function($scope, $http, CommonProp,
 	// db.loadDatabase({}, function () {
 	// var orders = db.getCollection('orders');
 	// });
+//	$scope.total = CommonProp.getTotal();
 	vm.buy = function(laptop) {
 		var orders = $scope.db.getCollection('orders');
 		console.log(orders.data[0].items);
 		CommonProp.addItem(laptop);
 		CommonProp.setTotal();
-		vm.total = CommonProp.getTotal();
+		$scope.total = CommonProp.getTotal();
 //		CommonProp.setItems(orders.data[0].items);
 //		CommonProp.setTotal(orders.data[0].total);
 		console.log(orders.data != null);
@@ -360,7 +362,7 @@ routerApp.controller('ShopCtrl', function($scope, $http, CommonProp,
 //			items : laptop.id
 //		});
 		orders.data[0].items = CommonProp.getItems();
-		orders.data[0].total = vm.total;
+		orders.data[0].total = $scope.total;
 		console.log(orders);
 		console.log(orders.items);
 		console.log(orders.total);
