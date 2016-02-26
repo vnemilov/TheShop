@@ -1,4 +1,23 @@
 <div ng-controller="ShopCtrl as shctrl">
+
+	<!-- NAVIGATION -->
+	<nav class="navbar-fixed-top navbar-inverse" role="navigation">
+		<ul class="nav navbar-nav leftNavMenu">
+			<li><a ui-sref="home">{{'HOME' | translate}}</a></li>
+			<li><a ui-sref="shop">{{'SHOP' | translate}}</a></li>
+			<li><a ui-sref="cart"><span
+					class="glyphicon glyphicon-shopping-cart"></span></a></li>
+			<li class="languageLi"><a id="bgbgbg"
+				ng-click="shctrl.changeLanguage('bgBG')" class="languageLink"><img
+					src="resources/images/bgFlag.png"></a></li>
+			<li class="languageLi"><a
+				ng-click="shctrl.changeLanguage('enUS')" class="languageLink"><img
+					src="resources/images/euFlag.gif"></a></li>
+
+
+
+		</ul>
+	</nav>
 	<div class="col-md-2">
 		<!-- Sidebar -->
 		<div class="col-md-12">
@@ -20,8 +39,8 @@
 					<ul>
 						<li ng-repeat="ram in shctrl.ramsGroup | orderBy:'toString()'"><label><input
 								type="checkbox" ng-model="shctrl.useRams[ram]" />{{ram}}<span>({{
-									(shctrl.filteredLaptops | filter:query | filter:shctrl.count('ram',
-									ram)).length }})</span></label></li>
+									(shctrl.filteredLaptops | filter:query |
+									filter:shctrl.count('ram', ram)).length }})</span></label></li>
 					</ul>
 				</div>
 
@@ -30,8 +49,8 @@
 					<ul>
 						<li ng-repeat="hdd in shctrl.hddsGroup | orderBy:'toString()'"><label><input
 								type="checkbox" ng-model="shctrl.useHDDs[hdd]" />{{hdd}}<span>({{
-									(shctrl.filteredLaptops | filter:query | filter:shctrl.count('hdd',
-									hdd)).length }})</span></label></li>
+									(shctrl.filteredLaptops | filter:query |
+									filter:shctrl.count('hdd', hdd)).length }})</span></label></li>
 					</ul>
 				</div>
 				<div class="filter">
@@ -39,8 +58,8 @@
 					<ul>
 						<li ng-repeat="video in shctrl.videosGroup | orderBy:'toString()'"><label><input
 								type="checkbox" ng-model="shctrl.useVideos[video]" />{{video}}<span>({{
-									(shctrl.filteredLaptops | filter:query | filter:shctrl.count('video',
-									video)).length }})</span></label></li>
+									(shctrl.filteredLaptops | filter:query |
+									filter:shctrl.count('video', video)).length }})</span></label></li>
 					</ul>
 				</div>
 				<div class="filter">
@@ -50,8 +69,8 @@
 							ng-repeat="processor in shctrl.processorsGroup | orderBy:'toString()'">
 							<label><input type="checkbox"
 								ng-model="shctrl.useProcessors[processor]" />{{processor}} <span>({{
-									(shctrl.filteredLaptops | filter:query | filter:shctrl.count('processor',
-									processor)).length }})</span></label>
+									(shctrl.filteredLaptops | filter:query |
+									filter:shctrl.count('processor', processor)).length }})</span></label>
 						</li>
 					</ul>
 				</div>
@@ -64,25 +83,19 @@
 		<div class="text-right total">
 			<div ng-if="shctrl.language=='english'">
 				<a ui-sref="cart"> {{'TOTAL' | translate}}: </a><span
-					class="thePrice">€{{shctrl.total * shctrl.localCurrency | number:0}}</span>
+					class="thePrice">€{{shctrl.total * shctrl.localCurrency |
+					number:0}}</span>
 			</div>
 			<div ng-if="shctrl.language=='bulgarian'">
 				<a ui-sref="cart"> {{'TOTAL' | translate}}: </a><span
-					class="thePrice">{{shctrl.total * shctrl.localCurrency | number:0}}лв.</span>
+					class="thePrice">{{shctrl.total * shctrl.localCurrency |
+					number:0}}лв.</span>
 			</div>
 		</div>
 		<span>{{'SORT BY' | translate}}: </span><select
 			ng-init="orderProp = shctrl.orderOptions[2]" ng-model="orderProp"
 			ng-options="opt as opt.label | translate for opt in shctrl.orderOptions"></select>
 		<div>
-			<ul>
-				<li class="languageLi"><a id="bgbgbg"
-					ng-click="shctrl.changeLanguage('bgBG')" class="languageLink"><img
-						src="resources/images/bgFlag.png"></a></li>
-				<li class="languageLi"><a ng-click="shctrl.changeLanguage('enUS')"
-					class="languageLink"><img src="resources/images/euFlag.gif"></a></li>
-			</ul>
-			{{shctrl.localCurrency}}
 			<ng-pluralize count="shctrl.filteredLaptops.length"
 				when="{
 	'0':'{{&quot;NOTHINGFOUND&quot; | translate}}',
@@ -112,7 +125,8 @@
 					});
 		</script>
 		<button id="getJSONData">Get JSON data</button>
-
+		<button ng-click="shctrl.sell()"></button>
+		<button onclick="hohdf()">regreg</button>
 		<div id="hoho" hidden></div>
 		<button onclick="alert($( 'value' ).first().text())">ALERT</button>
 		<div class="row">
@@ -138,11 +152,13 @@
 						</div>
 						<div ng-if="shctrl.language=='english'">
 							<button class="btn btn-success" ng-click="shctrl.buy(laptop)">{{"BUY_FOR"
-								| translate}} €{{(laptop.price * shctrl.localCurrency).toFixed(0)}}</button>
+								| translate}} €{{(laptop.price *
+								shctrl.localCurrency).toFixed(0)}}</button>
 						</div>
 						<div ng-if="shctrl.language=='bulgarian'">
 							<button class="btn btn-success" ng-click="shctrl.buy(laptop)">{{"BUY_FOR"
-								| translate}} {{(laptop.price * shctrl.localCurrency).toFixed(0)}}лв.</button>
+								| translate}} {{(laptop.price *
+								shctrl.localCurrency).toFixed(0)}}лв.</button>
 						</div>
 					</div>
 				</div>
