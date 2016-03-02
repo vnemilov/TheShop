@@ -13,7 +13,6 @@ routerApp.config(function($stateProvider, $urlRouterProvider) {
 		templateUrl : 'views/home.html',
 		controller : 'MainCtrl'
 	})
-
 	.state('shop', {
 		url : '/shop',
 		templateUrl : 'views/shop.html',
@@ -44,11 +43,54 @@ routerApp.config([ '$translateProvider', function($translateProvider) {
 // MAIN CONTROLLER
 routerApp.controller('MainCtrl', function($scope, CommonProp, $translate,
 		$filter) {
-	var vm = this;
-	$scope.total = CommonProp.getTotal();
-	vm.items = CommonProp.getItems();
-	vm.language = CommonProp.getLocale();
+//	var vm = this;
+//	vm.items = CommonProp.getItems();
+//	vm.language = CommonProp.getLocale();
+//
+//	vm.cart = 'cart';
+//	$scope.db = new loki(vm.cart, {
+//		autoload : false,
+//		persistenceMethod : 'adapter',
+//		adapter : new jquerySyncAdapter({
+//			ajaxLib : $
+//		})
+//	});
+//	$scope.db.loadDatabase({}, function() {
+//		console.log($scope.db.listCollections());
+//		if ($scope.db.getCollection('orders') === null) {
+//			var orders = $scope.db.addCollection('orders');
+//			console.log(null != orders.data);
+//			console.log(orders.data.length);
+//			orders.insert({
+//				items : CommonProp.getItems(),
+//				total : CommonProp.getTotal()
+//			});
+//			console.log(orders.data);
+//			$scope.db.saveDatabase();
+//		} else {
+//			var orders = $scope.db.getCollection('orders');
+//			CommonProp.setItems(orders.data[0].items);
+//			CommonProp.setTotal(orders.data[0].total);
+//			$
+//			$scope.total = CommonProp.getTotal();
+//			$scope.db.saveDatabase();
+//		}
+//		var users2 = $scope.db.getCollection('orders');
+//		console.log(users2.data);
+//
+//	});
+});
 
+// CART CONTROLLER
+routerApp.controller('CartCtrl', function($scope, CommonProp, $translate,
+		$filter) {
+	var vm = this;
+	$scope.$watch('total', function(newValue) {
+		$scope.total = newValue;
+	});
+	$scope.$watch('items', function(newValue){
+		$scope.items = newValue;
+	});
 	vm.cart = 'cart';
 	$scope.db = new loki(vm.cart, {
 		autoload : false,
@@ -69,60 +111,21 @@ routerApp.controller('MainCtrl', function($scope, CommonProp, $translate,
 			});
 			console.log(orders.data);
 			$scope.db.saveDatabase();
+			$scope.$apply();
 		} else {
 			var orders = $scope.db.getCollection('orders');
 			CommonProp.setItems(orders.data[0].items);
 			CommonProp.setTotal(orders.data[0].total);
 			$scope.total = CommonProp.getTotal();
+			$scope.items = CommonProp.getItems();
 			$scope.db.saveDatabase();
+			$scope.$apply();
 		}
 		var users2 = $scope.db.getCollection('orders');
 		console.log(users2.data);
-
-	});
-});
-
-// CART CONTROLLER
-routerApp.controller('CartCtrl', function($scope, CommonProp, $translate,
-		$filter) {
-	var vm = this;
-	$scope.$watch('total', function(newValue) {
-		$scope.total = newValue;
-	});
-	vm.cart = 'cart';
-	var db = new loki(vm.cart, {
-		autoload : false,
-		persistenceMethod : 'adapter',
-		adapter : new jquerySyncAdapter({
-			ajaxLib : $
-		})
-	});
-	db.loadDatabase({}, function() {
-		console.log(db.listCollections());
-		if (db.getCollection('orders') === null) {
-			var orders = db.addCollection('orders');
-			console.log(null != orders.data);
-			console.log(orders.data.length);
-			orders.insert({
-				items : CommonProp.getItems(),
-				total : CommonProp.getTotal()
-			});
-			console.log(orders.data);
-			db.saveDatabase();
-			$scope.$apply();
-		} else {
-			var orders = db.getCollection('orders');
-			CommonProp.setItems(orders.data[0].items);
-			CommonProp.setTotal(orders.data[0].total);
-			$scope.total = CommonProp.getTotal();
-			db.saveDatabase();
-			$scope.$apply();
-		}
-		var users2 = db.getCollection('orders');
-		console.log(users2.data);
 		$scope.$apply();
 	});
-	vm.items = CommonProp.getItems();
+	$scope.items = CommonProp.getItems();
 	vm.language = CommonProp.getLocale();
 	vm.localCurrency = CommonProp.getLocalCurrency();
 	// Sweet alert used to create a modal window for deletion
@@ -135,6 +138,7 @@ routerApp.controller('CartCtrl', function($scope, CommonProp, $translate,
 		var goodBuyMoreSwal = $filter('translate')("GOOD_BUY_MORE");
 		swal({
 			title : removeItemSwal,
+			text: laptop.model,
 			showCancelButton : true,
 			confirmButtonColor : "#DD6B55",
 			confirmButtonText : yesSwal,
@@ -145,11 +149,10 @@ routerApp.controller('CartCtrl', function($scope, CommonProp, $translate,
 			if (isConfirm) {
 				swal({
 					showConfirmButton : false,
-					title : deletedSwal,
-					text : " " + laptop + " ",
+					title : laptop.model + ' ' + deletedSwal,
 					type : "success",
-					timer : 1500
-				}), CommonProp.removeItem(laptop);
+					timer : 1000
+				}), CommonProp.removeItem(laptop.id);
 				CommonProp.setTotal();
 				$scope.total = CommonProp.getTotal();
 				orders.data[0].items = CommonProp.getItems();
@@ -162,7 +165,6 @@ routerApp.controller('CartCtrl', function($scope, CommonProp, $translate,
 				swal({
 					showConfirmButton : false,
 					title : goodBuyMoreSwal,
-					text : " " + laptop + " ",
 					type : "success",
 					timer : 850
 				});
@@ -170,6 +172,65 @@ routerApp.controller('CartCtrl', function($scope, CommonProp, $translate,
 
 		});
 	};
+	vm.clearCart = function() {
+		var orders = $scope.db.getCollection('orders');
+		var removeItemSwal = $filter('translate')('DELETE_ALL_ITEMS');
+		var yesSwal = $filter('translate')('YES');
+		var noSwal = $filter('translate')('NO');
+		var deletedSwal = $filter('translate')("DELETED_CART");
+		var goodBuyMoreSwal = $filter('translate')("GOOD_BUY_MORE");
+		swal({
+			title : removeItemSwal,
+			showCancelButton : true,
+			confirmButtonColor : "#DD6B55",
+			confirmButtonText : yesSwal,
+			cancelButtonText : noSwal,
+			closeOnConfirm : false,
+			closeOnCancel : false
+		}, function(isConfirm) {
+			if (isConfirm) {
+//				 window.location="http://localhost/shop/#/shop";
+				console.log('before dialog??');
+				swal({
+					showConfirmButton : false,
+					title : deletedSwal,
+					type : "success",
+					timer : 1000
+				}),
+				console.log('After dialog??');
+				CommonProp.setItems([]);
+				CommonProp.setTotal();
+				$scope.total = CommonProp.getTotal();
+				orders.data[0].items = CommonProp.getItems();
+				orders.data[0].total = $scope.total;
+				$scope.db.saveDatabase(function() {
+					console.log('asd');
+				});
+				$scope.$digest();
+				window.location="http://localhost/shop/#/shop";
+			} else {
+				swal({
+					showConfirmButton : false,
+					title : goodBuyMoreSwal,
+					text : "lololo",
+					type : "success",
+					timer : 850
+				});
+			}
+			console.log('outside dialog??');
+		});
+	};
+//	vm.clearCart = function(){
+//		var orders = $scope.db.getCollection('orders');
+//		CommonProp.setItems([]);
+//		CommonProp.setTotal();
+//		$scope.total = CommonProp.getTotal();
+//		orders.data[0].items = CommonProp.getItems();
+//		orders.data[0].total = $scope.total;
+//		$scope.db.saveDatabase(function() {
+//			console.log('asd');
+//		});
+//	};
 	vm.buy = function(laptop) {
 		var orders = $scope.db.getCollection('orders');
 		console.log(orders.data[0].items);
@@ -183,7 +244,7 @@ routerApp.controller('CartCtrl', function($scope, CommonProp, $translate,
 		// items : laptop.id
 		// });
 		orders.data[0].items = CommonProp.getItems();
-		orders.data[0].total = $scope.total;
+		orders.data[0].total = CommonProp.getTotal();
 		console.log(orders);
 		console.log(orders.items);
 		console.log(orders.total);
@@ -229,17 +290,17 @@ routerApp.controller('ShopCtrl', function($scope, $http, CommonProp,
 		$scope.total = newValue;
 	});
 	vm.cart = 'cart';
-	var db = new loki(vm.cart, {
+	$scope.db = new loki(vm.cart, {
 		autoload : false,
 		persistenceMethod : 'adapter',
 		adapter : new jquerySyncAdapter({
 			ajaxLib : $
 		})
 	});
-	db.loadDatabase({}, function() {
-		console.log(db.listCollections());
-		if (db.getCollection('orders') === null) {
-			var orders = db.addCollection('orders');
+	$scope.db.loadDatabase({}, function() {
+		console.log($scope.db.listCollections());
+		if ($scope.db.getCollection('orders') === null) {
+			var orders = $scope.db.addCollection('orders');
 			console.log(null != orders.data);
 			console.log(orders.data.length);
 			orders.insert({
@@ -247,16 +308,14 @@ routerApp.controller('ShopCtrl', function($scope, $http, CommonProp,
 				total : CommonProp.getTotal()
 			});
 			console.log(orders.data);
-			db.saveDatabase();
+			$scope.db.saveDatabase();
 		} else {
-			var orders = db.getCollection('orders');
+			var orders = $scope.db.getCollection('orders');
 			CommonProp.setItems(orders.data[0].items);
 			CommonProp.setTotal(orders.data[0].total);
 			$scope.total = CommonProp.getTotal();
-			db.saveDatabase();
-		}
-		var users2 = db.getCollection('orders');
-		console.log(users2.data);
+			$scope.db.saveDatabase();
+		} 
 
 	});
 
@@ -464,48 +523,42 @@ routerApp.controller('ShopCtrl', function($scope, $http, CommonProp,
 });
 
 // LAPTOP CONTROLLER
-routerApp.controller('LaptopCtrl', function($stateParams, $http, $scope,
+routerApp.controller('LaptopCtrl', function($stateParams, $http, $scope, $translate,
 		CommonProp) {
 
 	var vm = this;
-	$scope.$watch('total', function(newValue) {
-		$scope.total = newValue;
-	});
 	vm.cart = 'cart';
-	var db = new loki(vm.cart, {
+	$scope.db = new loki(vm.cart, {
 		autoload : false,
 		persistenceMethod : 'adapter',
 		adapter : new jquerySyncAdapter({
 			ajaxLib : $
 		})
 	});
-	db.loadDatabase({}, function() {
-		console.log(db.listCollections());
-		if (db.getCollection('orders') === null) {
-			var orders = db.addCollection('orders');
-			console.log(null != orders.data);
-			console.log(orders.data.length);
+	var startTime = Date.now();
+	$scope.db.loadDatabase({}, function() {
+		console.log($scope.db.listCollections());
+		if ($scope.db.getCollection('orders') === null) {
+			var orders = $scope.db.addCollection('orders');
 			orders.insert({
 				items : CommonProp.getItems(),
 				total : CommonProp.getTotal()
 			});
-			console.log(orders.data);
-			db.saveDatabase();
+			$scope.db.saveDatabase();
 		} else {
-			var orders = db.getCollection('orders');
+			var orders = $scope.db.getCollection('orders');
 			CommonProp.setItems(orders.data[0].items);
 			CommonProp.setTotal(orders.data[0].total);
-			$scope.total = CommonProp.getTotal();
-			db.saveDatabase();
+			$scope.db.saveDatabase();
+//			$scope.totalTime = (Date.now()-startTime)*2;
+			console.log(Date.now()-startTime);
 		}
-		var users2 = db.getCollection('orders');
-		console.log(users2.data);
 
 	});
 	vm.laptop = {};
 	// $scope..total = CommonProp.getTotal();
-	vm.justMessage = 'heheheheh';
 	$scope.$watch('total', function(newValue) {
+		console.log(newValue + ' after load');
 		CommonProp.setTotal(newValue);
 		$scope.total = CommonProp.getTotal();
 	});
@@ -525,6 +578,7 @@ routerApp.controller('LaptopCtrl', function($stateParams, $http, $scope,
 		console.log(orders.data[0].items);
 		CommonProp.addItem(laptop);
 		CommonProp.setTotal();
+		
 		$scope.total = CommonProp.getTotal();
 		// CommonProp.setItems(orders.data[0].items);
 		// CommonProp.setTotal(orders.data[0].total);
@@ -563,12 +617,12 @@ routerApp.controller('LaptopCtrl', function($stateParams, $http, $scope,
 
 		}
 	};
-	setTimeout(function() {
-		$scope.$watch('total', function(newValue) {
-			CommonProp.setTotal(newValue);
-			$scope.total = CommonProp.getTotal();
-		});
-	}, 1500);
+	setTimeout(function(){
+		console.log('testTimeout 1st ' + $scope.total);
+		$scope.total = CommonProp.getTotal();
+		console.log('testTimeout 2nd ' + $scope.total);
+		$scope.$apply();
+	}, 200);
 
 });
 

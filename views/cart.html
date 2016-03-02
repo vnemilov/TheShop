@@ -27,7 +27,7 @@
 					<th>{{'INITIAL_PRICE' | translate}}</th>
 					<th>{{'TOTAL_PRICE' | translate}}</th>
 				</tr>
-				<tr ng-repeat="item in cctrl.items">
+				<tr ng-repeat="item in items">
 					<td><a ui-sref="laptop({name: '{{item.id}}'})">{{item.model}}</a></td>
 					<td><input type="number" class="quantity" id="{{item.id}}"
 						step="1" min="1" max="50" value="{{item.count}}" />
@@ -46,7 +46,7 @@
 						<p ng-if="cctrl.language=='english'" class="totalPriceForUnit">€{{(item.price*cctrl.localCurrency)*item.count
 							| number:0}}</p>
 						<p ng-if="cctrl.language=='bulgarian'" class="totalPriceForUnit">{{(item.price*cctrl.localCurrency)*item.count
-							| number:0}}лв.</p> <a ng-click="cctrl.removeItem(item.id)"><span
+							| number:0}}лв.</p> <a ng-click="cctrl.removeItem(item)"><span
 							class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
 					</td>
 				</tr>
@@ -57,9 +57,10 @@
 					<td></td>
 					<td align="right">{{'TOTAL' | translate}}:</td>
 					<td ng-model="total" ng-if="cctrl.language=='english'">€{{total
-						| number:0}}</td>
+						| number:0}} <button class='btn btn-warning' ng-click='cctrl.clearCart()'>{{'DELETE_ALL_ITEMS' | translate}}</button></td>
 					<td ng-model="total" ng-if="cctrl.language=='bulgarian'">{{total
-						* 1.95 | number:0}}лв.</td>
+						* 1.95 | number:0}}лв. <button class='btn btn-warning' ng-click='cctrl.clearCart()'>{{'DELETE_ALL_ITEMS' | translate}}</button></td>
+						
 				</tr>
 			</tfoot>
 		</table>

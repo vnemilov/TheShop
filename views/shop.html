@@ -121,14 +121,15 @@
 										$("#hoho").append($title);
 										return;
 									});
+									setTimeout(function(){
+										alert($( 'value' ).first().text());
+									}, 2000);
 								});
+
 					});
 		</script>
-		<button id="getJSONData">Get JSON data</button>
-		<button ng-click="shctrl.sell()"></button>
-		<button onclick="hohdf()">regreg</button>
+		<button id="getJSONData">Get 1 EUR to BGN</button>
 		<div id="hoho" hidden></div>
-		<button onclick="alert($( 'value' ).first().text())">ALERT</button>
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="col-md-4"
