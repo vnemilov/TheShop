@@ -10,10 +10,8 @@ routerApp.config(function($stateProvider, $urlRouterProvider) {
 	// STATES
 	.state('home', {
 		url : '/home',
-		templateUrl : 'views/home.html',
-		controller : 'MainCtrl'
-	})
-	.state('shop', {
+		templateUrl : 'views/home.html'
+	}).state('shop', {
 		url : '/shop',
 		templateUrl : 'views/shop.html',
 		controller : 'ShopCtrl'
@@ -29,9 +27,8 @@ routerApp.config(function($stateProvider, $urlRouterProvider) {
 });
 // Translate provider to load json files according to the chosen language
 routerApp.config([ '$translateProvider', function($translateProvider) {
-	$translateProvider.preferredLanguage('enUS'); // set the preferred
-	// language to enUS
-
+	$translateProvider.preferredLanguage('enUS'); // set the preferred language to enUS
+	
 	// Loading json files
 	$translateProvider.useStaticFilesLoader({
 		prefix : 'languages/',
@@ -41,45 +38,7 @@ routerApp.config([ '$translateProvider', function($translateProvider) {
 } ]);
 
 // MAIN CONTROLLER
-routerApp.controller('MainCtrl', function($scope, CommonProp, $translate,
-		$filter) {
-//	var vm = this;
-//	vm.items = CommonProp.getItems();
-//	vm.language = CommonProp.getLocale();
-//
-//	vm.cart = 'cart';
-//	$scope.db = new loki(vm.cart, {
-//		autoload : false,
-//		persistenceMethod : 'adapter',
-//		adapter : new jquerySyncAdapter({
-//			ajaxLib : $
-//		})
-//	});
-//	$scope.db.loadDatabase({}, function() {
-//		console.log($scope.db.listCollections());
-//		if ($scope.db.getCollection('orders') === null) {
-//			var orders = $scope.db.addCollection('orders');
-//			console.log(null != orders.data);
-//			console.log(orders.data.length);
-//			orders.insert({
-//				items : CommonProp.getItems(),
-//				total : CommonProp.getTotal()
-//			});
-//			console.log(orders.data);
-//			$scope.db.saveDatabase();
-//		} else {
-//			var orders = $scope.db.getCollection('orders');
-//			CommonProp.setItems(orders.data[0].items);
-//			CommonProp.setTotal(orders.data[0].total);
-//			$
-//			$scope.total = CommonProp.getTotal();
-//			$scope.db.saveDatabase();
-//		}
-//		var users2 = $scope.db.getCollection('orders');
-//		console.log(users2.data);
-//
-//	});
-});
+
 
 // CART CONTROLLER
 routerApp.controller('CartCtrl', function($scope, CommonProp, $translate,
@@ -88,7 +47,7 @@ routerApp.controller('CartCtrl', function($scope, CommonProp, $translate,
 	$scope.$watch('total', function(newValue) {
 		$scope.total = newValue;
 	});
-	$scope.$watch('items', function(newValue){
+	$scope.$watch('items', function(newValue) {
 		$scope.items = newValue;
 	});
 	vm.cart = 'cart';
@@ -131,14 +90,14 @@ routerApp.controller('CartCtrl', function($scope, CommonProp, $translate,
 	// Sweet alert used to create a modal window for deletion
 	vm.removeItem = function(laptop) {
 		var orders = $scope.db.getCollection('orders');
-		var removeItemSwal = $filter('translate')('DELETE_THIS_ITEM');
+		var removeItemSwal = $filter('translate')('REMOVE_THIS_ITEM');
 		var yesSwal = $filter('translate')('YES');
 		var noSwal = $filter('translate')('NO');
 		var deletedSwal = $filter('translate')("DELETED");
 		var goodBuyMoreSwal = $filter('translate')("GOOD_BUY_MORE");
 		swal({
 			title : removeItemSwal,
-			text: laptop.model,
+			text : laptop.model,
 			showCancelButton : true,
 			confirmButtonColor : "#DD6B55",
 			confirmButtonText : yesSwal,
@@ -189,15 +148,14 @@ routerApp.controller('CartCtrl', function($scope, CommonProp, $translate,
 			closeOnCancel : false
 		}, function(isConfirm) {
 			if (isConfirm) {
-//				 window.location="http://localhost/shop/#/shop";
+				// window.location="http://localhost/shop/#/shop";
 				console.log('before dialog??');
 				swal({
 					showConfirmButton : false,
 					title : deletedSwal,
 					type : "success",
 					timer : 1000
-				}),
-				console.log('After dialog??');
+				}), console.log('After dialog??');
 				CommonProp.setItems([]);
 				CommonProp.setTotal();
 				$scope.total = CommonProp.getTotal();
@@ -207,7 +165,7 @@ routerApp.controller('CartCtrl', function($scope, CommonProp, $translate,
 					console.log('asd');
 				});
 				$scope.$digest();
-				window.location="http://localhost/shop/#/shop";
+				window.location = "http://localhost/shop/#/shop";
 			} else {
 				swal({
 					showConfirmButton : false,
@@ -220,29 +178,13 @@ routerApp.controller('CartCtrl', function($scope, CommonProp, $translate,
 			console.log('outside dialog??');
 		});
 	};
-//	vm.clearCart = function(){
-//		var orders = $scope.db.getCollection('orders');
-//		CommonProp.setItems([]);
-//		CommonProp.setTotal();
-//		$scope.total = CommonProp.getTotal();
-//		orders.data[0].items = CommonProp.getItems();
-//		orders.data[0].total = $scope.total;
-//		$scope.db.saveDatabase(function() {
-//			console.log('asd');
-//		});
-//	};
 	vm.buy = function(laptop) {
 		var orders = $scope.db.getCollection('orders');
 		console.log(orders.data[0].items);
 		CommonProp.addMore(laptop);
 		CommonProp.setTotal();
 		$scope.total = CommonProp.getTotal();
-		// CommonProp.setItems(orders.data[0].items);
-		// CommonProp.setTotal(orders.data[0].total);
 		console.log(orders.data != null);
-		// orders.insert({
-		// items : laptop.id
-		// });
 		orders.data[0].items = CommonProp.getItems();
 		orders.data[0].total = CommonProp.getTotal();
 		console.log(orders);
@@ -254,11 +196,6 @@ routerApp.controller('CartCtrl', function($scope, CommonProp, $translate,
 		console.log(orders);
 		console.log(orders.data.length);
 	};
-	// vm.buy = function(laptop) {
-	// CommonProp.addMore(laptop);
-	// CommonProp.setTotal();
-	// $scope.total = CommonProp.getTotal();
-	// };
 	vm.language = CommonProp.getLocale();
 	vm.localCurrency = CommonProp.getLocalCurrency();
 
@@ -314,11 +251,10 @@ routerApp.controller('ShopCtrl', function($scope, $http, CommonProp,
 			CommonProp.setItems(orders.data[0].items);
 			CommonProp.setTotal(orders.data[0].total);
 			$scope.total = CommonProp.getTotal();
+			$scope.$apply();
 			$scope.db.saveDatabase();
-		} 
-
+		}
 	});
-
 	vm.language = CommonProp.getLocale();
 	vm.useBrands = [];
 	vm.useRams = [];
@@ -326,7 +262,6 @@ routerApp.controller('ShopCtrl', function($scope, $http, CommonProp,
 	vm.useVideos = [];
 	vm.laptops = [];
 	vm.useProcessors = [];
-	// vm.total = CommonProp.getTotal();
 	$http.get('laptops/laptops.json').success(function(data) {
 		vm.laptops = data;
 	});
@@ -461,33 +396,16 @@ routerApp.controller('ShopCtrl', function($scope, $http, CommonProp,
 		var delay = function() {
 			vm.filteredLaptops = filterAfterProcessors;
 		}
-
 		$timeout(delay, 200);
 	}, true);
-
-	// $scope.$watch('filtered', function(newValue) {
-	// if (angular.isArray(newValue)) {
-	// console.log(newValue.length);
-	// }
-	// }, true);
 	console.log($scope.db.listCollections());
-
-	// db.loadDatabase({}, function () {
-	// var orders = db.getCollection('orders');
-	// });
-	// $scope.total = CommonProp.getTotal();
 	vm.buy = function(laptop) {
 		var orders = $scope.db.getCollection('orders');
 		console.log(orders.data[0].items);
 		CommonProp.addItem(laptop);
 		CommonProp.setTotal();
 		$scope.total = CommonProp.getTotal();
-		// CommonProp.setItems(orders.data[0].items);
-		// CommonProp.setTotal(orders.data[0].total);
 		console.log(orders.data != null);
-		// orders.insert({
-		// items : laptop.id
-		// });
 		orders.data[0].items = CommonProp.getItems();
 		orders.data[0].total = $scope.total;
 		console.log(orders);
@@ -516,15 +434,13 @@ routerApp.controller('ShopCtrl', function($scope, $http, CommonProp,
 			vm.language = 'english';
 			$translate.use(langKey);
 			vm.localCurrency = CommonProp.getLocalCurrency();
-
 		}
 	};
-
 });
 
 // LAPTOP CONTROLLER
-routerApp.controller('LaptopCtrl', function($stateParams, $http, $scope, $translate,
-		CommonProp) {
+routerApp.controller('LaptopCtrl', function($stateParams, $http, $scope,
+		$translate, $q, CommonProp) {
 
 	var vm = this;
 	vm.cart = 'cart';
@@ -549,19 +465,14 @@ routerApp.controller('LaptopCtrl', function($stateParams, $http, $scope, $transl
 			var orders = $scope.db.getCollection('orders');
 			CommonProp.setItems(orders.data[0].items);
 			CommonProp.setTotal(orders.data[0].total);
+			$scope.total = CommonProp.getTotal();
+			$scope.$apply();
 			$scope.db.saveDatabase();
-//			$scope.totalTime = (Date.now()-startTime)*2;
-			console.log(Date.now()-startTime);
+			console.log(Date.now() - startTime);
 		}
 
 	});
 	vm.laptop = {};
-	// $scope..total = CommonProp.getTotal();
-	$scope.$watch('total', function(newValue) {
-		console.log(newValue + ' after load');
-		CommonProp.setTotal(newValue);
-		$scope.total = CommonProp.getTotal();
-	});
 	// Load the json file for the laptop
 	vm.name = $stateParams.name;
 	$http.get('laptops/' + vm.name + '.json').success(function(data) {
@@ -578,14 +489,8 @@ routerApp.controller('LaptopCtrl', function($stateParams, $http, $scope, $transl
 		console.log(orders.data[0].items);
 		CommonProp.addItem(laptop);
 		CommonProp.setTotal();
-		
 		$scope.total = CommonProp.getTotal();
-		// CommonProp.setItems(orders.data[0].items);
-		// CommonProp.setTotal(orders.data[0].total);
 		console.log(orders.data != null);
-		// orders.insert({
-		// items : laptop.id
-		// });
 		orders.data[0].items = CommonProp.getItems();
 		orders.data[0].total = $scope.total;
 		console.log(orders);
@@ -617,13 +522,6 @@ routerApp.controller('LaptopCtrl', function($stateParams, $http, $scope, $transl
 
 		}
 	};
-	setTimeout(function(){
-		console.log('testTimeout 1st ' + $scope.total);
-		$scope.total = CommonProp.getTotal();
-		console.log('testTimeout 2nd ' + $scope.total);
-		$scope.$apply();
-	}, 200);
-
 });
 
 // Common properties service
@@ -732,85 +630,3 @@ var uniqueItems = function(data, key) {
 	}
 	return result;
 }
-
-// routerApp.filter('groupBy', function() {
-// return function(collection, key) {
-// if (collection === null)
-// return;
-// return uniqueItems(collection, key);
-// };
-// });
-// routerApp
-// .directive(
-// 'languageDirective',
-// function($compile, CommonProp) {
-//
-// return {
-// restrict : 'EA',
-// controller : 'AllLaptopsCtrl',
-// link : linkFn,
-// scope : {
-// total : '=',
-// lala : '@',
-// laptop : '=',
-// language : '@'
-// }
-// };
-//
-// function linkFn(scope, element, attrs) {
-// scope.$watch('language', function(n, o) {
-// if (!n)
-// return;
-// element.empty().append(
-// $compile(getTemplate())(scope));
-// });
-// element.bind('click', function() {
-// scope.buy = function(laptop) {
-// CommonProp.addItem(laptop);
-// CommonProp.setTotal(laptop);
-// scope.total = CommonProp.getTotal();
-// scope.$apply();
-// $scope.$watch('total', function(newValue) {
-// $scope.total = newValue;
-// });
-//
-// }
-// $scope.$watch('total', function(newValue) {
-// $parentScope.total = newValue;
-// });
-//
-// });
-// function getTemplate() {
-// if (scope.language === 'english')
-// return '<button class="btn btn-success" ng-click="buy(laptop)">{{"BUY_FOR" |
-// translate}} ${{laptop.price * localCurrency}}</button>'
-// else
-// return '<button class="btn btn-success" ng-click="buy(laptop)">{{"BUY_FOR" |
-// translate}} {{laptop.price * localCurrency}}лв.</button>'
-// }
-// }
-// });
-// routerApp.directive('hymn', function() {
-// return {
-// restrict : 'E',
-// scope : {
-// total : '=',
-// lala : '@',
-// laptop : '=',
-// language : '@'
-// },
-// link : function(scope, element, attrs) {
-// scope.contentUrl = attrs.language + '.html';
-// attrs.$observe("language", function(v) {
-// console.log(v);
-// scope.contentUrl = v + '.html';
-// scope.buy = function(laptop) {
-// CommonProp.addItem(laptop);
-// CommonProp.setTotal(laptop);
-// scope.total = CommonProp.getTotal();
-// };
-// });
-// template: '<div ng-include="contentUrl"></div>'
-// }
-// }
-// });
