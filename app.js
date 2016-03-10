@@ -256,12 +256,12 @@ routerApp.controller('ShopCtrl', function($scope, $http, CommonProp,
 		}
 	});
 	vm.language = CommonProp.getLocale();
-	vm.useBrands = [];
-	vm.useRams = [];
-	vm.useHDDs = [];
-	vm.useVideos = [];
-	vm.laptops = [];
-	vm.useProcessors = [];
+	vm.useBrands = {};
+	vm.useRams = {};
+	vm.useHDDs = {};
+	vm.useVideos = {};
+	vm.laptops = {};
+	vm.useProcessors = {};
 	$http.get('laptops/laptops.json').success(function(data) {
 		vm.laptops = data;
 	});
