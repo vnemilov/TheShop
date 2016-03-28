@@ -3,7 +3,7 @@
 	<!-- NAVIGATION -->
 	<nav class="navbar-fixed-top navbar-inverse" role="navigation">
 		<ul class="nav navbar-nav leftNavMenu">
-			<li><a ui-sref="home">{{'HOME' | translate}}</a></li>
+			<li><a ui-sref="login">{{'HOME' | translate}}</a></li>
 			<li><a ui-sref="shop">{{'SHOP' | translate}}</a></li>
 			<li><a ui-sref="cart"><span
 					class="glyphicon glyphicon-shopping-cart"></span></a></li>
@@ -13,9 +13,7 @@
 			<li class="languageLi"><a
 				ng-click="shctrl.changeLanguage('enUS')" class="languageLink"><img
 					src="resources/images/euFlag.gif"></a></li>
-
-
-
+					<li><a href="#" ng-click="shctrl.logout()">logout</a></li>
 		</ul>
 	</nav>
 	<div class="col-md-2">

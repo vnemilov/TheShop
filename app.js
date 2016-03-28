@@ -1,16 +1,17 @@
-var routerApp = angular.module('routerApp', [ 'ui.router',
-		'pascalprecht.translate', 'oitozero.ngSweetAlert' ]);
+var routerApp = angular.module('routerApp', [ 'ui.router', 'toaster', 'ngAnimate',
+	'pascalprecht.translate', 'oitozero.ngSweetAlert' ]);
 
 routerApp.config(function($stateProvider, $urlRouterProvider) {
 
-	$urlRouterProvider.otherwise('/home');
+	$urlRouterProvider.otherwise('/login');
 
 	$stateProvider
 
 	// STATES
-	.state('home', {
-		url : '/home',
-		templateUrl : 'views/home.html'
+	.state('login', {
+		url : '/login',
+		templateUrl : 'views/login.html',
+		controller: 'HomeCtrl'
 	}).state('shop', {
 		url : '/shop',
 		templateUrl : 'views/shop.html',
@@ -23,6 +24,10 @@ routerApp.config(function($stateProvider, $urlRouterProvider) {
 		url : '/cart',
 		templateUrl : 'views/cart.html',
 		controller : 'CartCtrl'
+	}).state('signup',{
+		url:'/signup',
+		templateUrl: "views/signup.html",
+		controller: 'signUpController'
 	})
 });
 // Translate provider to load json files according to the chosen language
@@ -36,13 +41,80 @@ routerApp.config([ '$translateProvider', function($translateProvider) {
 	});
 	$translateProvider.useSanitizeValueStrategy('escape');
 } ]);
+// SIGNRUP CONTROLLER
+routerApp.controller('signUpController', function ($scope, $rootScope, $http, Data, $state) {
+	$scope.signUp = function (customer) {
+		Data.post('signUp', {
+			customer: customer
+		}).then(function (results) {
+			if (results.status == "success") {
+                // $rootScope.authenticated = true;
+                // $rootScope.uid = results.uid;
+                // $rootScope.name = results.name;
+                // $rootScope.email = results.email;
 
-// MAIN CONTROLLER
+                //   // Put the object into storage
+                //   localStorage.setItem('uid', JSON.stringify($rootScope.uid));
+                //   localStorage.setItem('name', JSON.stringify($rootScope.name));
+                //   localStorage.setItem('email', JSON.stringify($rootScope.email));
+                //   localStorage.setItem('authenticated', JSON.stringify($rootScope.authenticated));
+                $scope.data = {
+                	status: 'success',
+                	message: 'Please Log In now'
+                };
+                Data.toast($scope.data);
+                $state.go('login');
+            }
+        });
+	};
+});
 
+
+// HOME CONTROLLER
+routerApp.controller('HomeCtrl', function ($scope, $rootScope, $http, Data, $state){
+	if(localStorage.length == 0){
+		$state.go('login');
+
+	};
+    //initially set those objects to null to avoid undefined error
+    $scope.login = {};
+    $scope.signup = {};
+    $scope.doLogin = function (customer) {
+    	console.log('dologin inside');
+    	Data.post('login', {
+    		customer: customer
+    	}).then(function (results) {
+    		Data.toast(results);
+    		console.log(results);
+    		console.log(results.status)
+    		if (results.status == "success") {
+                  // Put the object into storage
+                  localStorage.setItem('auth', JSON.stringify(results['status']));
+                  localStorage.setItem('uid', JSON.stringify(results['uid']));
+                  localStorage.setItem('name', JSON.stringify(results['name']));
+                  localStorage.setItem('email', JSON.stringify(results['email']));
+                  console.log("it's ok");
+                  $state.go('shop');
+              }
+          });
+    };
+    $scope.uid = localStorage['uid'];
+    $scope.name = localStorage['name'];
+    $scope.email = localStorage['email'];
+    $scope.signup = {email:'',password:'',name:'',phone:'',address:''};
+
+    $scope.logout = function () {
+    	Data.get('logout').then(function (results) {
+    		Data.toast(results);
+    		localStorage.clear();
+    		$state.go('login');
+    	});
+    }
+});
 
 // CART CONTROLLER
 routerApp.controller('CartCtrl', function($scope, CommonProp, $translate,
-		$filter) {
+	$filter) {
 	var vm = this;
 	$scope.$watch('total', function(newValue) {
 		$scope.total = newValue;
@@ -58,10 +130,12 @@ routerApp.controller('CartCtrl', function($scope, CommonProp, $translate,
 			ajaxLib : $
 		})
 	});
+	$scope.collectionName = localStorage['name'];
+	console.log($scope.collectionName);
 	$scope.db.loadDatabase({}, function() {
 		console.log($scope.db.listCollections());
-		if ($scope.db.getCollection('orders') === null) {
-			var orders = $scope.db.addCollection('orders');
+		if ($scope.db.getCollection($scope.collectionName) === null) {
+			var orders = $scope.db.addCollection($scope.collectionName);
 			console.log(null != orders.data);
 			console.log(orders.data.length);
 			orders.insert({
@@ -72,7 +146,7 @@ routerApp.controller('CartCtrl', function($scope, CommonProp, $translate,
 			$scope.db.saveDatabase();
 			$scope.$apply();
 		} else {
-			var orders = $scope.db.getCollection('orders');
+			var orders = $scope.db.getCollection($scope.collectionName);
 			CommonProp.setItems(orders.data[0].items);
 			CommonProp.setTotal(orders.data[0].total);
 			$scope.total = CommonProp.getTotal();
@@ -80,7 +154,7 @@ routerApp.controller('CartCtrl', function($scope, CommonProp, $translate,
 			$scope.db.saveDatabase();
 			$scope.$apply();
 		}
-		var users2 = $scope.db.getCollection('orders');
+		var users2 = $scope.db.getCollection($scope.collectionName);
 		console.log(users2.data);
 		$scope.$apply();
 	});
@@ -89,7 +163,7 @@ routerApp.controller('CartCtrl', function($scope, CommonProp, $translate,
 	vm.localCurrency = CommonProp.getLocalCurrency();
 	// Sweet alert used to create a modal window for deletion
 	vm.removeItem = function(laptop) {
-		var orders = $scope.db.getCollection('orders');
+		var orders = $scope.db.getCollection($scope.collectionName);
 		var removeItemSwal = $filter('translate')('REMOVE_THIS_ITEM');
 		var yesSwal = $filter('translate')('YES');
 		var noSwal = $filter('translate')('NO');
@@ -132,7 +206,7 @@ routerApp.controller('CartCtrl', function($scope, CommonProp, $translate,
 		});
 	};
 	vm.clearCart = function() {
-		var orders = $scope.db.getCollection('orders');
+		var orders = $scope.db.getCollection($scope.collectionName);
 		var removeItemSwal = $filter('translate')('DELETE_ALL_ITEMS');
 		var yesSwal = $filter('translate')('YES');
 		var noSwal = $filter('translate')('NO');
@@ -177,27 +251,27 @@ routerApp.controller('CartCtrl', function($scope, CommonProp, $translate,
 			}
 			console.log('outside dialog??');
 		});
-	};
-	vm.buy = function(laptop) {
-		var orders = $scope.db.getCollection('orders');
-		console.log(orders.data[0].items);
-		CommonProp.addMore(laptop);
-		CommonProp.setTotal();
-		$scope.total = CommonProp.getTotal();
-		console.log(orders.data != null);
-		orders.data[0].items = CommonProp.getItems();
-		orders.data[0].total = CommonProp.getTotal();
-		console.log(orders);
-		console.log(orders.items);
-		console.log(orders.total);
-		$scope.db.saveDatabase(function() {
-			console.log('asd');
-		});
-		console.log(orders);
-		console.log(orders.data.length);
-	};
-	vm.language = CommonProp.getLocale();
-	vm.localCurrency = CommonProp.getLocalCurrency();
+};
+vm.buy = function(laptop) {
+	var orders = $scope.db.getCollection($scope.collectionName);
+	console.log(orders.data[0].items);
+	CommonProp.addMore(laptop);
+	CommonProp.setTotal();
+	$scope.total = CommonProp.getTotal();
+	console.log(orders.data != null);
+	orders.data[0].items = CommonProp.getItems();
+	orders.data[0].total = CommonProp.getTotal();
+	console.log(orders);
+	console.log(orders.items);
+	console.log(orders.total);
+	$scope.db.saveDatabase(function() {
+		console.log('asd');
+	});
+	console.log(orders);
+	console.log(orders.data.length);
+};
+vm.language = CommonProp.getLocale();
+vm.localCurrency = CommonProp.getLocalCurrency();
 
 	// Changing the language for the app
 	vm.changeLanguage = function(langKey) {
@@ -219,9 +293,13 @@ routerApp.controller('CartCtrl', function($scope, CommonProp, $translate,
 });
 
 // SHOP CONTROLLER
-routerApp.controller('ShopCtrl', function($scope, $http, CommonProp,
-		$translate, $timeout, $filter) {
+routerApp.controller('ShopCtrl', function($scope, $http, $state, CommonProp, Data,
+	$translate, $timeout, $filter) {
+	if(localStorage.length == 0){
+		localStorage['name'] = 'guest';
 
+	};
+	$scope.collectionName = localStorage['name'];
 	var vm = this;
 	$scope.$watch('total', function(newValue) {
 		$scope.total = newValue;
@@ -236,8 +314,8 @@ routerApp.controller('ShopCtrl', function($scope, $http, CommonProp,
 	});
 	$scope.db.loadDatabase({}, function() {
 		console.log($scope.db.listCollections());
-		if ($scope.db.getCollection('orders') === null) {
-			var orders = $scope.db.addCollection('orders');
+		if ($scope.db.getCollection($scope.collectionName) === null) {
+			var orders = $scope.db.addCollection($scope.collectionName);
 			console.log(null != orders.data);
 			console.log(orders.data.length);
 			orders.insert({
@@ -247,7 +325,7 @@ routerApp.controller('ShopCtrl', function($scope, $http, CommonProp,
 			console.log(orders.data);
 			$scope.db.saveDatabase();
 		} else {
-			var orders = $scope.db.getCollection('orders');
+			var orders = $scope.db.getCollection($scope.collectionName);
 			CommonProp.setItems(orders.data[0].items);
 			CommonProp.setTotal(orders.data[0].total);
 			$scope.total = CommonProp.getTotal();
@@ -256,12 +334,12 @@ routerApp.controller('ShopCtrl', function($scope, $http, CommonProp,
 		}
 	});
 	vm.language = CommonProp.getLocale();
-	vm.useBrands = {};
-	vm.useRams = {};
-	vm.useHDDs = {};
-	vm.useVideos = {};
-	vm.laptops = {};
-	vm.useProcessors = {};
+	$scope.useBrands = {};
+	$scope.useRams = {};
+	$scope.useHDDs = {};
+	$scope.useVideos = {};
+	$scope.laptops = {};
+	$scope.useProcessors = {};
 	$http.get('laptops/laptops.json').success(function(data) {
 		vm.laptops = data;
 	});
@@ -398,27 +476,34 @@ routerApp.controller('ShopCtrl', function($scope, $http, CommonProp,
 		}
 		$timeout(delay, 200);
 	}, true);
-	console.log($scope.db.listCollections());
-	vm.buy = function(laptop) {
-		var orders = $scope.db.getCollection('orders');
-		console.log(orders.data[0].items);
-		CommonProp.addItem(laptop);
-		CommonProp.setTotal();
-		$scope.total = CommonProp.getTotal();
-		console.log(orders.data != null);
-		orders.data[0].items = CommonProp.getItems();
-		orders.data[0].total = $scope.total;
-		console.log(orders);
-		console.log(orders.items);
-		console.log(orders.total);
-		$scope.db.saveDatabase(function() {
-			console.log('asd');
-		});
-		console.log(orders);
-		console.log(orders.data.length);
-	};
-	vm.language = CommonProp.getLocale();
-	vm.localCurrency = CommonProp.getLocalCurrency();
+console.log($scope.db.listCollections());
+vm.buy = function(laptop) {
+	var orders = $scope.db.getCollection($scope.collectionName);
+	console.log(orders.data[0].items);
+	CommonProp.addItem(laptop);
+	CommonProp.setTotal();
+	$scope.total = CommonProp.getTotal();
+	console.log(orders.data != null);
+	orders.data[0].items = CommonProp.getItems();
+	orders.data[0].total = $scope.total;
+	console.log(orders);
+	console.log(orders.items);
+	console.log(orders.total);
+	$scope.db.saveDatabase(function() {
+		console.log('asd');
+	});
+	console.log(orders);
+	console.log(orders.data.length);
+};
+    this.logout = function () {
+    	Data.get('logout').then(function (results) {
+    		Data.toast(results);
+    		localStorage.clear();
+    		$state.go('login');
+    	});
+    };
+vm.language = CommonProp.getLocale();
+vm.localCurrency = CommonProp.getLocalCurrency();
 
 	// Changing the language for the app
 	vm.changeLanguage = function(langKey) {
@@ -440,7 +525,7 @@ routerApp.controller('ShopCtrl', function($scope, $http, CommonProp,
 
 // LAPTOP CONTROLLER
 routerApp.controller('LaptopCtrl', function($stateParams, $http, $scope,
-		$translate, $q, CommonProp) {
+	$translate, $q, CommonProp) {
 
 	var vm = this;
 	vm.cart = 'cart';
@@ -454,15 +539,15 @@ routerApp.controller('LaptopCtrl', function($stateParams, $http, $scope,
 	var startTime = Date.now();
 	$scope.db.loadDatabase({}, function() {
 		console.log($scope.db.listCollections());
-		if ($scope.db.getCollection('orders') === null) {
-			var orders = $scope.db.addCollection('orders');
+		if ($scope.db.getCollection($scope.collectionName) === null) {
+			var orders = $scope.db.addCollection($scope.collectionName);
 			orders.insert({
 				items : CommonProp.getItems(),
 				total : CommonProp.getTotal()
 			});
 			$scope.db.saveDatabase();
 		} else {
-			var orders = $scope.db.getCollection('orders');
+			var orders = $scope.db.getCollection($scope.collectionName);
 			CommonProp.setItems(orders.data[0].items);
 			CommonProp.setTotal(orders.data[0].total);
 			$scope.total = CommonProp.getTotal();
@@ -485,7 +570,7 @@ routerApp.controller('LaptopCtrl', function($stateParams, $http, $scope,
 		vm.localCurrency = 1;
 	}
 	vm.buy = function(laptop) {
-		var orders = $scope.db.getCollection('orders');
+		var orders = $scope.db.getCollection($scope.collectionName);
 		console.log(orders.data[0].items);
 		CommonProp.addItem(laptop);
 		CommonProp.setTotal();
@@ -526,76 +611,68 @@ routerApp.controller('LaptopCtrl', function($stateParams, $http, $scope,
 
 // Common properties service
 routerApp.service('CommonProp',
-		function() {
-			var Items = [];
-			var Total = 0;
-			var local = 'english';
-			var localCurrency = 1;
+	function() {
+		var Items = [];
+		var Total = 0;
+		var local = 'english';
+		var localCurrency = 1;
 
-			return {
-				getLocale : function() {
-					return local;
-				},
-				setLocale : function(newLocal) {
-					local = newLocal;
-				},
-				getLocalCurrency : function() {
-					return localCurrency;
-				},
-				setLocalCurrency : function(newLocalCurrency) {
-					localCurrency = newLocalCurrency;
-				},
-				getItems : function() {
-					return Items;
-				},
-				setItems : function(items) {
-					Items = items;
-				},
-				addMore : function(item) {
-					var arr = [];
-					$("input").each(function() {
-						arr.push($(this.id).selector);
-					});
+		return {
+			getLocale : function() {
+				return local;
+			},
+			setLocale : function(newLocal) {
+				local = newLocal;
+			},
+			getLocalCurrency : function() {
+				return localCurrency;
+			},
+			setLocalCurrency : function(newLocalCurrency) {
+				localCurrency = newLocalCurrency;
+			},
+			getItems : function() {
+				return Items;
+			},
+			setItems : function(items) {
+				Items = items;
+			},
+			addMore : function(item) {
+				var arr = [];
+				$("input").each(function() {
+					arr.push($(this.id).selector);
+				});
+				for (var i = 0; i < Items.length; i++) {
+					if (Items[i].id == item.id && item.id == arr[i]) {
+
+						Items[i].count = parseInt(document
+							.getElementById(arr[i]).value);
+						break;
+					}
+				}
+			},
+			removeItem : function(item) {
+				var newItem = item.toString();
+				for (var i = 0; i < Items.length; i += 1) {
+					if (Items[i].id == newItem) {
+						Items.splice(i, 1);
+					}
+				}
+				Total = 0;
+				for (var i = 0; i < Items.length; i += 1) {
+					Total += Items[i].price * Items[i].count;
+				}
+			},
+			addItem : function(item) {
+				if (Items.length != 0) {
+					var flag = false;
 					for (var i = 0; i < Items.length; i++) {
-						if (Items[i].id == item.id && item.id == arr[i]) {
-
-							Items[i].count = parseInt(document
-									.getElementById(arr[i]).value);
+						if (Items[i].id == item.id) {
+							Items[i].count += 1;
+							flag = true;
 							break;
 						}
 					}
-				},
-				removeItem : function(item) {
-					var newItem = item.toString();
-					for (var i = 0; i < Items.length; i += 1) {
-						if (Items[i].id == newItem) {
-							Items.splice(i, 1);
-						}
-					}
-					Total = 0;
-					for (var i = 0; i < Items.length; i += 1) {
-						Total += Items[i].price * Items[i].count;
-					}
-				},
-				addItem : function(item) {
-					if (Items.length != 0) {
-						var flag = false;
-						for (var i = 0; i < Items.length; i++) {
-							if (Items[i].id == item.id) {
-								Items[i].count += 1;
-								flag = true;
-								break;
-							}
-						}
-						if (!flag) {
-							Items.push({
-								'id' : item.id,
-								'count' : 1,
-								'price' : item.price,
-								'model' : item.model
-							});
-						}
-					} else {
+					if (!flag) {
 						Items.push({
 							'id' : item.id,
 							'count' : 1,
@@ -603,18 +680,26 @@ routerApp.service('CommonProp',
 							'model' : item.model
 						});
 					}
-				},
-				getTotal : function() {
-					return Total;
-				},
-				setTotal : function() {
-					Total = 0;
-					for (var i = 0; i < Items.length; i += 1) {
-						Total += Items[i].price * Items[i].count;
-					}
+				} else {
+					Items.push({
+						'id' : item.id,
+						'count' : 1,
+						'price' : item.price,
+						'model' : item.model
+					});
 				}
-			};
-		});
+			},
+			getTotal : function() {
+				return Total;
+			},
+			setTotal : function() {
+				Total = 0;
+				for (var i = 0; i < Items.length; i += 1) {
+					Total += Items[i].price * Items[i].count;
+				}
+			}
+		};
+	});
 
 var uniqueItems = function(data, key) {
 	var result = [];
